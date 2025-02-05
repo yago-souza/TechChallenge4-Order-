@@ -38,17 +38,17 @@ public class OrderServiceTest {
         UUID productId = UUID.randomUUID();
         OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0); // Usando o construtor correto
         Order order = new Order(
-                UUID.randomUUID(), // id
-                OrderStatus.OPEN, // status
-                clientId, // clientId
-                List.of(item), // items
-                "Rua Exemplo, 123", // deliveryAddress
-                100.0, // totalAmount
-                "Cartão de Crédito", // paymentMethod
-                LocalDateTime.now(), // estimatedDeliveryDate
-                "ABC123", // trackingCode
-                LocalDateTime.now(), // createdAt
-                LocalDateTime.now() // updatedAt
+                UUID.randomUUID(),
+                OrderStatus.OPEN,
+                clientId,
+                List.of(item),
+                "Rua Exemplo, 123",
+                100.0,
+                "Cartão de Crédito",
+                LocalDateTime.now(),
+                "ABC123",
+                LocalDateTime.now(),
+                LocalDateTime.now()
         );
 
         when(clientService.existsById(clientId)).thenReturn(false);
@@ -64,17 +64,17 @@ public class OrderServiceTest {
         UUID productId = UUID.randomUUID();
         OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0); // Usando o construtor correto
         Order order = new Order(
-                UUID.randomUUID(), // id
-                OrderStatus.OPEN, // status
-                clientId, // clientId
-                List.of(item), // items
-                "Rua Exemplo, 123", // deliveryAddress
-                100.0, // totalAmount
-                "Cartão de Crédito", // paymentMethod
-                LocalDateTime.now(), // estimatedDeliveryDate
-                "ABC123", // trackingCode
-                LocalDateTime.now(), // createdAt
-                LocalDateTime.now() // updatedAt
+                UUID.randomUUID(),
+                OrderStatus.OPEN,
+                clientId,
+                List.of(item),
+                "Rua Exemplo, 123",
+                100.0,
+                "Cartão de Crédito",
+                LocalDateTime.now(),
+                "ABC123",
+                LocalDateTime.now(),
+                LocalDateTime.now()
         );
 
         when(clientService.existsById(clientId)).thenReturn(true);
@@ -91,17 +91,17 @@ public class OrderServiceTest {
         UUID productId = UUID.randomUUID();
         OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0); // Usando o construtor correto
         Order order = new Order(
-                UUID.randomUUID(), // id
-                OrderStatus.OPEN, // status
-                clientId, // clientId
-                List.of(item), // items
-                "Rua Exemplo, 123", // deliveryAddress
-                100.0, // totalAmount
-                "Cartão de Crédito", // paymentMethod
-                LocalDateTime.now(), // estimatedDeliveryDate
-                "ABC123", // trackingCode
-                LocalDateTime.now(), // createdAt
-                LocalDateTime.now() // updatedAt
+                UUID.randomUUID(),
+                OrderStatus.OPEN,
+                clientId,
+                List.of(item),
+                "Rua Exemplo, 123",
+                100.0,
+                "Cartão de Crédito",
+                LocalDateTime.now(),
+                "ABC123",
+                LocalDateTime.now(),
+                LocalDateTime.now()
         );
 
         when(clientService.existsById(clientId)).thenReturn(true);

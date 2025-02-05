@@ -26,9 +26,9 @@ public class ClientService {
     public boolean existsById(UUID clientId) {
         try {
             Client client = clientGateway.getClientById(clientId);
-            return client != null; // Retorna true se o cliente existir
+            return client != null;
         } catch (Exception e) {
-            return false; // Retorna false se ocorrer um erro (ex: cliente não encontrado)
+            return false;
         }
     }
 }
