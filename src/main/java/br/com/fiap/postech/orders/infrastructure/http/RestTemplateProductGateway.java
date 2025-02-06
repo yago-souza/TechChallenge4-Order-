@@ -1,7 +1,7 @@
-package br.com.fiap.postech.orders.infrastructure;
+package br.com.fiap.postech.orders.infrastructure.http;
 
-import br.com.fiap.postech.orders.domain.Product;
-import br.com.fiap.postech.orders.gateway.ProductGateway;
+import br.com.fiap.postech.orders.domain.gateways.ProductGateway;
+import br.com.fiap.postech.orders.domain.models.Product;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
