@@ -93,11 +93,11 @@ public class Order {
         this.status = status;
     }
 
-    public UUID getClientId() {
+    public UUID getCustomerId() {
         return clientId;
     }
 
-    public void setClientId(UUID clientId) {
+    public void setCustomerId(UUID clientId) {
         this.clientId = clientId;
     }
 
