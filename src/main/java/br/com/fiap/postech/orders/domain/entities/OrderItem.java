@@ -1,4 +1,4 @@
-package br.com.fiap.postech.orders.domain;
+package br.com.fiap.postech.orders.domain.entities;
 
 import java.util.UUID;
 

@@ -1,9 +1,9 @@
-package br.com.fiap.postech.orders.service;
+package br.com.fiap.postech.orders.services;
 
-import br.com.fiap.postech.orders.domain.Product;
-import br.com.fiap.postech.orders.exeption.InsufficientStockException;
-import br.com.fiap.postech.orders.exeption.ProductNotFoundException;
-import br.com.fiap.postech.orders.gateway.ProductGateway;
+import br.com.fiap.postech.orders.domain.models.Product;
+import br.com.fiap.postech.orders.infrastructure.exception.InsufficientStockException;
+import br.com.fiap.postech.orders.infrastructure.exception.ProductNotFoundException;
+import br.com.fiap.postech.orders.domain.gateways.ProductGateway;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;

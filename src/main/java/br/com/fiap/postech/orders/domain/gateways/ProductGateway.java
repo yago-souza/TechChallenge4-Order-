@@ -1,6 +1,6 @@
-package br.com.fiap.postech.orders.gateway;
+package br.com.fiap.postech.orders.domain.gateways;
 
-import br.com.fiap.postech.orders.domain.Product;
+import br.com.fiap.postech.orders.domain.models.Product;
 
 import java.util.UUID;
 

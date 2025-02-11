@@ -1,21 +1,55 @@
-package br.com.fiap.postech.orders.domain;
+package br.com.fiap.postech.orders.domain.entities;
+
+import br.com.fiap.postech.orders.domain.enums.OrderStatus;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+@Entity
+@Table(name = "orders")
 public class Order {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+
+    @Enumerated(EnumType.STRING)
     private OrderStatus status;
+
+    @Column(nullable = false)
     private UUID clientId;
-    private List<OrderItem> items;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<OrderItem> items = new ArrayList<>();
+
+    @Column(nullable = false)
     private String deliveryAddress;
+
+    @Column(nullable = false)
     private double totalAmount;
+
+    @Column(nullable = false)
     private String paymentMethod;
+
     private LocalDateTime estimatedDeliveryDate;
     private String trackingCode;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    @PrePersist
+    public void prePersist() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 
     public Order() {
     }
@@ -32,7 +66,7 @@ public class Order {
             String trackingCode,
             LocalDateTime createdAt,
             LocalDateTime updatedAt
-    ) {
+            ) {
         this.id = id;
         this.status = status;
         this.clientId = clientId;
@@ -71,7 +105,7 @@ public class Order {
     }
 
     public List<OrderItem> getItems() {
-        return items;
+        return Collections.unmodifiableList(items);
     }
 
     public void setItems(List<OrderItem> items) {
@@ -88,10 +122,6 @@ public class Order {
 
     public double getTotalAmount() {
         return totalAmount;
-    }
-
-    public void setTotalAmount(double totalAmount) {
-        this.totalAmount = totalAmount;
     }
 
     public String getPaymentMethod() {
@@ -140,14 +170,20 @@ public class Order {
     }
 
     public void removeItem(OrderItem item) {
-        this.items.remove(item);
-        calculateTotalAmount(); // Recalcula o totalAmount
+        if (!this.items.remove(item)) {
+            throw new IllegalArgumentException("Item não encontrado no pedido.");
+        }
+        calculateTotalAmount();
     }
 
     public void clearItems() {
+        if (status != OrderStatus.OPEN) {
+            throw new IllegalStateException("Não é possível remover itens de um pedido processado.");
+        }
         this.items.clear();
-        this.totalAmount = 0.0; // Zera o totalAmount
+        this.totalAmount = 0.0;
     }
+
 
     private void calculateTotalAmount() {
         this.totalAmount = items.stream()

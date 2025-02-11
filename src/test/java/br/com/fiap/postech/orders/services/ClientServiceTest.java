@@ -1,8 +1,8 @@
-package br.com.fiap.postech.orders.service;
+package br.com.fiap.postech.orders.services;
 
-import br.com.fiap.postech.orders.domain.Client;
-import br.com.fiap.postech.orders.exeption.ClientNotFoundException;
-import br.com.fiap.postech.orders.gateway.ClientGateway;
+import br.com.fiap.postech.orders.domain.models.Client;
+import br.com.fiap.postech.orders.infrastructure.exception.ClientNotFoundException;
+import br.com.fiap.postech.orders.domain.gateways.ClientGateway;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
