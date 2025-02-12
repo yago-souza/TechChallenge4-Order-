@@ -2,16 +2,21 @@ package br.com.fiap.postech.orders.infrastructure.persistence;
 
 import br.com.fiap.postech.orders.domain.enums.OrderStatus;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
-@Table(name = "orders")
-public class Order {
+@Table(name = "TB_ORDERS")
+public class OrderEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,10 +26,10 @@ public class Order {
     private OrderStatus status;
 
     @Column(nullable = false)
-    private UUID clientId;
+    private UUID customerId;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<OrderItem> items = new ArrayList<>();
+    private List<OrderItemEntity> items = new ArrayList<>();
 
     @Column(nullable = false)
     private String deliveryAddress;
@@ -51,125 +56,52 @@ public class Order {
         updatedAt = LocalDateTime.now();
     }
 
-    public Order() {
-    }
-
-    public Order(
-            UUID id,
-            OrderStatus status,
-            UUID clientId,
-            List<OrderItem> items,
-            String deliveryAddress,
-            double totalAmount,
-            String paymentMethod,
-            LocalDateTime estimatedDeliveryDate,
-            String trackingCode,
-            LocalDateTime createdAt,
-            LocalDateTime updatedAt
-            ) {
+   public void setId(UUID id) {
         this.id = id;
-        this.status = status;
-        this.clientId = clientId;
-        this.items = items;
-        this.deliveryAddress = deliveryAddress;
-        this.totalAmount = totalAmount;
-        this.paymentMethod = paymentMethod;
-        this.estimatedDeliveryDate = estimatedDeliveryDate;
-        this.trackingCode = trackingCode;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public OrderStatus getStatus() {
-        return status;
     }
 
     public void setStatus(OrderStatus status) {
         this.status = status;
     }
 
-    public UUID getCustomerId() {
-        return clientId;
+    public void setCustomerId(UUID customerId) {
+        this.customerId = customerId;
     }
 
-    public void setClientId(UUID clientId) {
-        this.clientId = clientId;
-    }
-
-    public List<OrderItem> getItems() {
-        return Collections.unmodifiableList(items);
-    }
-
-    public void setItems(List<OrderItem> items) {
+    public void setItems(List<OrderItemEntity> items) {
         this.items = items;
-    }
-
-    public String getDeliveryAddress() {
-        return deliveryAddress;
     }
 
     public void setDeliveryAddress(String deliveryAddress) {
         this.deliveryAddress = deliveryAddress;
     }
 
-    public double getTotalAmount() {
-        return totalAmount;
-    }
-
-    public String getPaymentMethod() {
-        return paymentMethod;
-    }
-
     public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
-    }
-
-    public LocalDateTime getEstimatedDeliveryDate() {
-        return estimatedDeliveryDate;
     }
 
     public void setEstimatedDeliveryDate(LocalDateTime estimatedDeliveryDate) {
         this.estimatedDeliveryDate = estimatedDeliveryDate;
     }
 
-    public String getTrackingCode() {
-        return trackingCode;
-    }
-
     public void setTrackingCode(String trackingCode) {
         this.trackingCode = trackingCode;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    public void addItem(OrderItem item) {
+    public void addItem(OrderItemEntity item) {
         this.items.add(item);
         calculateTotalAmount(); // Recalcula o totalAmount
     }
 
-    public void removeItem(OrderItem item) {
+    public void removeItem(OrderItemEntity item) {
         if (!this.items.remove(item)) {
             throw new IllegalArgumentException("Item não encontrado no pedido.");
         }
@@ -187,7 +119,7 @@ public class Order {
 
     private void calculateTotalAmount() {
         this.totalAmount = items.stream()
-                .mapToDouble(OrderItem::getTotalPrice)
+                .mapToDouble(OrderItemEntity::getTotalPrice)
                 .sum();
     }
 

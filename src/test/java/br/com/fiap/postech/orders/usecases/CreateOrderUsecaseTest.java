@@ -8,7 +8,7 @@ import br.com.fiap.postech.orders.domain.gateways.ProductGateway;
 import br.com.fiap.postech.orders.domain.models.Customer;
 import br.com.fiap.postech.orders.domain.models.Product;
 import br.com.fiap.postech.orders.infrastructure.exception.*;
-import br.com.fiap.postech.orders.infrastructure.persistence.repositories.OrderRepository;
+import br.com.fiap.postech.orders.infrastructure.persistence.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

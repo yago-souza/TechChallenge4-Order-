@@ -1,24 +1,24 @@
 package br.com.fiap.postech.orders.infrastructure.persistence;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import java.util.UUID;
 
-public class OrderItem {
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@Table(name = "TB_ORDER_ITEMS")
+public class OrderItemEntity {
     private UUID id;
     private UUID productId;
     private int quantity;
     private double unitPrice;
     private double totalPrice;
-
-    public OrderItem() {
-    }
-
-    public OrderItem(UUID id, UUID productId, int quantity, double unitPrice, double totalPrice) {
-        this.id = id;
-        this.productId = productId;
-        this.quantity = quantity;
-        this.unitPrice = unitPrice;
-        this.totalPrice = totalPrice;
-    }
 
     public UUID getId() {
         return id;

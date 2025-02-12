@@ -1,7 +1,6 @@
 package br.com.fiap.postech.orders.domain.entities;
 
 import br.com.fiap.postech.orders.domain.enums.OrderStatus;
-import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,30 +8,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-@Entity
-@Table(name = "orders")
 public class Order {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    @Column(nullable = false)
     private UUID clientId;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<OrderItem> items = new ArrayList<>();
 
-    @Column(nullable = false)
     private String deliveryAddress;
 
-    @Column(nullable = false)
     private double totalAmount;
 
-    @Column(nullable = false)
     private String paymentMethod;
 
     private LocalDateTime estimatedDeliveryDate;
@@ -40,13 +29,11 @@ public class Order {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    @PrePersist
     public void prePersist() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
     }
 
-    @PreUpdate
     public void preUpdate() {
         updatedAt = LocalDateTime.now();
     }

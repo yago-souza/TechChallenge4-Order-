@@ -9,7 +9,7 @@ import java.util.UUID;
 import br.com.fiap.postech.orders.domain.entities.Order;
 import br.com.fiap.postech.orders.domain.enums.OrderStatus;
 import br.com.fiap.postech.orders.infrastructure.exception.InvalidStatusException;
-import br.com.fiap.postech.orders.infrastructure.persistence.repositories.OrderRepository;
+import br.com.fiap.postech.orders.infrastructure.persistence.OrderRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

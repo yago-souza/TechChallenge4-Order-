@@ -1,4 +1,4 @@
-package br.com.fiap.postech.orders.usecases;
+package br.com.fiap.postech.orders.application.usecases;
 
 import br.com.fiap.postech.orders.domain.entities.Order;
 import br.com.fiap.postech.orders.domain.enums.OrderStatus;

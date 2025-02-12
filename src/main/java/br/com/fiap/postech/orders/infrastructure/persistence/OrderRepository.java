@@ -1,4 +1,4 @@
-package br.com.fiap.postech.orders.infrastructure.persistence.repositories;
+package br.com.fiap.postech.orders.infrastructure.persistence;
 
 import br.com.fiap.postech.orders.domain.entities.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface OrderRepository extends JpaRepository<Order, UUID> {
+public interface OrderRepository extends JpaRepository<OrderEntity, UUID> {
 }
