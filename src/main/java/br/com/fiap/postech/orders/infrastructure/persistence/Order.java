@@ -1,4 +1,4 @@
-package br.com.fiap.postech.orders.domain.entities;
+package br.com.fiap.postech.orders.infrastructure.persistence;
 
 import br.com.fiap.postech.orders.domain.enums.OrderStatus;
 import jakarta.persistence.*;

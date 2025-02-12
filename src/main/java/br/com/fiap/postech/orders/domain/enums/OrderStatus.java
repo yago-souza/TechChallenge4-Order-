@@ -3,7 +3,7 @@ package br.com.fiap.postech.orders.domain.enums;
 public enum OrderStatus {
     OPEN,
     PAID,
-    IN_PROGRESS,
+    PROCESSING, // Pedido em preparação
     SHIPPED,
     DELIVERED,
     CANCELED,

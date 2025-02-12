@@ -2,16 +2,16 @@ package br.com.fiap.postech.orders.domain.models;
 
 import java.util.UUID;
 
-public class Client {
+public class Customer {
     private UUID id;
     private String name;
     private String email;
     private String address;
 
-    public Client() {
+    public Customer() {
     }
 
-    public Client(UUID id, String name, String email, String address) {
+    public Customer(UUID id, String name, String email, String address) {
         this.id = id;
         this.name = name;
         this.email = email;
