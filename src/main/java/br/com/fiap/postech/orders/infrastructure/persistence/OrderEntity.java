@@ -1,6 +1,7 @@
 package br.com.fiap.postech.orders.infrastructure.persistence;
 
 import br.com.fiap.postech.orders.domain.enums.OrderStatus;
+import br.com.fiap.postech.orders.domain.enums.PaymentMethod;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,7 +39,7 @@ public class OrderEntity {
     private double totalAmount;
 
     @Column(nullable = false)
-    private String paymentMethod;
+    private PaymentMethod paymentMethod;
 
     private LocalDateTime estimatedDeliveryDate;
     private String trackingCode;
@@ -76,7 +77,7 @@ public class OrderEntity {
         this.deliveryAddress = deliveryAddress;
     }
 
-    public void setPaymentMethod(String paymentMethod) {
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 

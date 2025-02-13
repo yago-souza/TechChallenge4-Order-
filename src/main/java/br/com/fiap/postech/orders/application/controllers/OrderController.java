@@ -1,7 +1,7 @@
-package br.com.fiap.postech.orders.infrastructure.controllers;
+package br.com.fiap.postech.orders.application.controllers;
 
+import br.com.fiap.postech.orders.application.usecases.CreateOrderUsecase;
 import br.com.fiap.postech.orders.domain.entities.Order;
-import br.com.fiap.postech.orders.usecases.CreateOrderUsecase;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

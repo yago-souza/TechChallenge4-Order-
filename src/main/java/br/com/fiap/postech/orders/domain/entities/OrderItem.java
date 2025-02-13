@@ -58,10 +58,6 @@ public class OrderItem {
         return totalPrice;
     }
 
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
     private void calculateTotalPrice() {
         this.totalPrice = this.quantity * this.unitPrice;
     }

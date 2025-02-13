@@ -1,14 +1,15 @@
-package br.com.fiap.postech.orders.usecases;
+package br.com.fiap.postech.orders.application.usecases;
 
 import br.com.fiap.postech.orders.domain.entities.Order;
 import br.com.fiap.postech.orders.domain.entities.OrderItem;
 import br.com.fiap.postech.orders.domain.enums.OrderStatus;
-import br.com.fiap.postech.orders.domain.gateways.CustomerGateway;
-import br.com.fiap.postech.orders.domain.gateways.ProductGateway;
-import br.com.fiap.postech.orders.domain.models.Customer;
-import br.com.fiap.postech.orders.domain.models.Product;
+import br.com.fiap.postech.orders.domain.enums.PaymentMethod;
+import br.com.fiap.postech.orders.infrastructure.API.CustomerGateway;
+import br.com.fiap.postech.orders.infrastructure.API.ProductGateway;
+import br.com.fiap.postech.orders.infrastructure.API.models.Customer;
+import br.com.fiap.postech.orders.infrastructure.API.models.Product;
 import br.com.fiap.postech.orders.infrastructure.exception.*;
-import br.com.fiap.postech.orders.infrastructure.persistence.OrderRepository;
+import br.com.fiap.postech.orders.infrastructure.gateway.impl.OrderRepositoryGatewayImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -33,7 +34,7 @@ public class CreateOrderUsecaseTest {
     private CustomerGateway customerGateway;
 
     @Mock
-    private OrderRepository orderRepository;
+    private OrderRepositoryGatewayImpl orderRepositoryGateway;
 
     @Mock
     private ProductGateway productGateway;
@@ -60,7 +61,7 @@ public class CreateOrderUsecaseTest {
                 List.of(item),
                 "Rua Exemplo, 123",
                 100.0,
-                "Cartão de Crédito",
+                PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
                 "ABC123",
                 LocalDateTime.now(),
@@ -79,30 +80,30 @@ public class CreateOrderUsecaseTest {
         when(productGateway.isInStock(productId, 2)).thenReturn(true);
 
         // Simulação do salvamento do pedido no repositório
-        when(orderRepository.save(any(Order.class))).thenReturn(order);
+        when(orderRepositoryGateway.save(order)).thenReturn(order);
 
         // Execução do caso de uso e validação de que nenhuma exceção é lançada
         assertDoesNotThrow(() -> createOrderUsecase.execute(order));
 
         // Verifica se o pedido foi realmente salvo no repositório
-        verify(orderRepository, times(1)).save(any(Order.class));
+        verify(orderRepositoryGateway, times(1)).save(order);
     }
 
 
 
     @Test
-    public void testCreateOrder_ClientNotFound() {
-        UUID clientId = UUID.randomUUID();
+    public void testCreateOrder_ClientNotFound_ShouldThrowException() {
+        UUID customerId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
 
         Order order = new Order(
                 UUID.randomUUID(),
                 OrderStatus.OPEN,
-                clientId,
+                customerId,
                 List.of(new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0)),
                 "Rua Exemplo, 123",
                 100.0,
-                "Cartão de Crédito",
+                PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
                 "ABC123",
                 LocalDateTime.now(),
@@ -110,28 +111,28 @@ public class CreateOrderUsecaseTest {
         );
 
         // Simula a ausência do cliente no sistema
-        when(customerGateway.getCustomerById(clientId)).thenReturn(null);
+        when(customerGateway.getCustomerById(customerId)).thenReturn(null);
 
         // Executa e verifica que uma exceção é lançada
         assertThrows(CustomerNotFoundException.class, () -> createOrderUsecase.execute(order));
 
         // Garante que o pedido não foi salvo
-        verify(orderRepository, never()).save(any(Order.class));
+        verify(orderRepositoryGateway, never()).save(order);
     }
 
     @Test
-    public void testCreateOrder_ProductNotFound() {
-        UUID clientId = UUID.randomUUID();
+    public void testCreateOrder_ProductNotFound_ShouldThrowException() {
+        UUID customerId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
 
         Order order = new Order(
                 UUID.randomUUID(),
                 OrderStatus.OPEN,
-                clientId,
+                customerId,
                 List.of(new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0)),
                 "Rua Exemplo, 123",
                 100.0,
-                "Cartão de Crédito",
+                PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
                 "ABC123",
                 LocalDateTime.now(),
@@ -139,8 +140,8 @@ public class CreateOrderUsecaseTest {
         );
 
         // Simulação de um cliente válido retornado pelo ClientGateway
-        Customer customer = new Customer(clientId, "Test Client", "test@test.com", "teste, 123, teste");
-        when(customerGateway.getCustomerById(clientId)).thenReturn(customer);
+        Customer customer = new Customer(customerId, "Test Client", "test@test.com", "teste, 123, teste");
+        when(customerGateway.getCustomerById(customerId)).thenReturn(customer);
 
         // Simula a ausência do produto no sistema
         when(productGateway.getProductById(productId)).thenReturn(null);
@@ -149,15 +150,15 @@ public class CreateOrderUsecaseTest {
         assertThrows(ProductNotFoundException.class, () -> createOrderUsecase.execute(order));
 
         // Garante que o pedido não foi salvo
-        verify(orderRepository, never()).save(any(Order.class));
+        verify(orderRepositoryGateway, never()).save(order);
 
         // Garante que a verificação de estoque nunca foi chamada, já que o produto nem existe
         verify(productGateway, never()).isInStock(any(), any(Integer.class));
     }
 
     @Test
-    public void testCreateOrder_InsufficientStock() {
-        UUID clientId = UUID.randomUUID();
+    public void testCreateOrder_InsufficientStock_ShouldThrowException() {
+        UUID customerId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
 
         // Simulação de um item do pedido com quantidade maior do que o estoque disponível
@@ -165,11 +166,11 @@ public class CreateOrderUsecaseTest {
         Order order = new Order(
                 UUID.randomUUID(),
                 OrderStatus.OPEN,
-                clientId,
+                customerId,
                 List.of(item),
                 "Rua Exemplo, 123",
                 100.0,
-                "Cartão de Crédito",
+                PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
                 "ABC123",
                 LocalDateTime.now(),
@@ -177,8 +178,8 @@ public class CreateOrderUsecaseTest {
         );
 
         // Simulação um cliente válido
-        Customer customer = new Customer(clientId, "Test Client", "test@test.com", "teste, 123, teste");
-        when(customerGateway.getCustomerById(clientId)).thenReturn(customer);
+        Customer customer = new Customer(customerId, "Test Client", "test@test.com", "teste, 123, teste");
+        when(customerGateway.getCustomerById(customerId)).thenReturn(customer);
 
         // Simulação de um produto válido retornado pelo ProductGateway
         Product product = new Product(productId, "Produto Teste", "Descrição", 10.0, 10);
@@ -194,20 +195,20 @@ public class CreateOrderUsecaseTest {
         verify(productGateway).isInStock(productId, 2);
 
         // Garante que o pedido não foi salvo
-        verify(orderRepository, never()).save(any(Order.class));
+        verify(orderRepositoryGateway, never()).save(order);
     }
 
     @Test
     public void testCreateOrder_NoItems_ShouldThrowException() {
-        UUID clientId = UUID.randomUUID();
+        UUID customerId = UUID.randomUUID();
         Order order = new Order(
                 UUID.randomUUID(),
                 OrderStatus.OPEN,
-                clientId,
+                customerId,
                 List.of(), // Sem itens
                 "Rua Exemplo, 123",
                 100.0,
-                "Cartão de Crédito",
+                PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
                 "ABC123",
                 LocalDateTime.now(),
@@ -215,13 +216,13 @@ public class CreateOrderUsecaseTest {
         );
 
         // Simulação um cliente válido
-        Customer customer = new Customer(clientId, "Test Client", "test@test.com", "teste, 123, teste");
-        when(customerGateway.getCustomerById(clientId)).thenReturn(customer);
+        Customer customer = new Customer(customerId, "Test Client", "test@test.com", "teste, 123, teste");
+        when(customerGateway.getCustomerById(customerId)).thenReturn(customer);
 
         assertThrows(NoItemException.class, () -> createOrderUsecase.execute(order));
         // Garante que a busca por item foi chamada, já que o pedito não possui itens
         verify(productGateway, never()).getProductById(any());
-        verify(orderRepository, never()).save(any(Order.class));
+        verify(orderRepositoryGateway, never()).save(order);
     }
 
     @Test
@@ -235,7 +236,7 @@ public class CreateOrderUsecaseTest {
                 List.of(item),
                 "Rua Exemplo, 123",
                 100.0,
-                "Cartão de Crédito",
+                PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
                 "ABC123",
                 LocalDateTime.now(),
@@ -244,23 +245,23 @@ public class CreateOrderUsecaseTest {
 
 
         assertThrows(NoCustomerException.class, () -> createOrderUsecase.execute(order));
-        verify(orderRepository, never()).save(any(Order.class));
+        verify(orderRepositoryGateway, never()).save(order);
     }
 
     @Test
     public void testCreateOrder_NegativeQuantity_ShouldThrowException() {
-        UUID clientId = UUID.randomUUID();
+        UUID customerId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
 
         OrderItem item = new OrderItem(UUID.randomUUID(), productId, -2, 50.0, -100.0);
         Order order = new Order(
                 UUID.randomUUID(),
                 OrderStatus.OPEN,
-                clientId,
+                customerId,
                 List.of(item),
                 "Rua Exemplo, 123",
                 -100.0, // Valor inválido
-                "Cartão de Crédito",
+                PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
                 "ABC123",
                 LocalDateTime.now(),
@@ -268,18 +269,97 @@ public class CreateOrderUsecaseTest {
         );
 
         // Simulação de um cliente válido retornado pelo ClientGateway
-        Customer customer = new Customer(clientId, "Test Client", "test@test.com", "teste, 123, teste");
-        when(customerGateway.getCustomerById(clientId)).thenReturn(customer);
+        Customer customer = new Customer(customerId, "Test Client", "test@test.com", "teste, 123, teste");
+        when(customerGateway.getCustomerById(customerId)).thenReturn(customer);
 
         // Simulação de um produto válido retornado pelo ProductGateway
         Product product = new Product(productId, "Produto Teste", "Descrição", 10.0, 100);
         when(productGateway.getProductById(productId)).thenReturn(product);
 
-        // Simula estoque suficiente para o produto (não necessário para um item inválido)
         when(productGateway.isInStock(productId, -2)).thenReturn(false);
 
         assertThrows(InvalidQuantityException.class, () -> createOrderUsecase.execute(order));
-        verify(orderRepository, never()).save(any(Order.class));
+        verify(orderRepositoryGateway, never()).save(order);
     }
 
+    @Test
+    void testCreateOrder_WhenAddressIsNull_ShouldThrowException() {
+        UUID customerId = UUID.randomUUID();
+        UUID productId = UUID.randomUUID();
+
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, -2, 50.0, -100.0);
+        Order order = new Order(
+                UUID.randomUUID(),
+                OrderStatus.OPEN,
+                customerId,
+                List.of(item),
+                null,
+                100.0,
+                PaymentMethod.CREDIT_CARD,
+                LocalDateTime.now(),
+                "ABC123",
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
+
+        // Simulação de um cliente válido retornado pelo ClientGateway
+        Customer customer = new Customer(customerId, "Test Client", "test@test.com", "teste, 123, teste");
+        when(customerGateway.getCustomerById(customerId)).thenReturn(customer);
+
+        assertThrows(InvalidAddressException.class, () -> createOrderUsecase.execute(order));
+    }
+
+    @Test
+    void testCreateOrder_WhenAddressIsEmpty_ShouldThrowException() {
+        UUID customerId = UUID.randomUUID();
+        UUID productId = UUID.randomUUID();
+
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, -2, 50.0, -100.0);
+        Order order = new Order(
+                UUID.randomUUID(),
+                OrderStatus.OPEN,
+                customerId,
+                List.of(item),
+                "",
+                100.0,
+                PaymentMethod.CREDIT_CARD,
+                LocalDateTime.now(),
+                "ABC123",
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
+
+        // Simulação de um cliente válido retornado pelo ClientGateway
+        Customer customer = new Customer(customerId, "Test Client", "test@test.com", "teste, 123, teste");
+        when(customerGateway.getCustomerById(customerId)).thenReturn(customer);
+
+        assertThrows(InvalidAddressException.class, () -> createOrderUsecase.execute(order));
+    }
+
+    @Test
+    void testCreateOrder_WhenTrackingCodeIsNull_ShouldThrowException() {
+        UUID customerId = UUID.randomUUID();
+        UUID productId = UUID.randomUUID();
+
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, -2, 50.0, -100.0);
+        Order order = new Order(
+                UUID.randomUUID(),
+                OrderStatus.OPEN,
+                customerId,
+                List.of(item),
+                "Rua Exemplo, 123",
+                100.0,
+                PaymentMethod.CREDIT_CARD,
+                LocalDateTime.now(),
+                "",
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
+
+        // Simulação de um cliente válido retornado pelo ClientGateway
+        Customer customer = new Customer(customerId, "Test Client", "test@test.com", "teste, 123, teste");
+        when(customerGateway.getCustomerById(customerId)).thenReturn(customer);
+
+        assertThrows(InvalidTrackingCodeException.class, () -> createOrderUsecase.execute(order));
+    }
 }

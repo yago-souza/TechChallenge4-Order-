@@ -4,6 +4,7 @@ import br.com.fiap.postech.orders.domain.entities.Order;
 import br.com.fiap.postech.orders.domain.enums.OrderStatus;
 import br.com.fiap.postech.orders.infrastructure.exception.InvalidStatusException;
 import br.com.fiap.postech.orders.infrastructure.exception.OrderNotFoundException;
+import br.com.fiap.postech.orders.infrastructure.gateway.impl.OrderRepositoryGatewayImpl;
 import br.com.fiap.postech.orders.infrastructure.persistence.OrderRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -13,16 +14,16 @@ import java.util.UUID;
 
 @Service
 public class UpdateOrderStatusUseCase {
-    private final OrderRepository orderRepository;
+    private final OrderRepositoryGatewayImpl orderRepositoryGateway;
 
-    public UpdateOrderStatusUseCase(OrderRepository orderRepository) {
-        this.orderRepository = orderRepository;
+    public UpdateOrderStatusUseCase(OrderRepositoryGatewayImpl orderRepository) {
+        this.orderRepositoryGateway = orderRepository;
     }
 
     @Transactional
     public Order execute(UUID orderId, OrderStatus newOrderStatus) {
         // Valida se o pedido já existe
-        Order currentOrder = validateOrder(orderId);
+        Order currentOrder = orderRepositoryGateway.findById(orderId);
 
         // Valida se o novo status é diferente do atual
         validateStatusTransition(currentOrder.getStatus(), newOrderStatus);
@@ -31,12 +32,7 @@ public class UpdateOrderStatusUseCase {
         currentOrder.setStatus(newOrderStatus);
 
         // Presiste o pedido
-        return orderRepository.save(currentOrder);
-    }
-
-    private Order validateOrder (UUID orderId) {
-        return orderRepository.findById(orderId)
-                .orElseThrow(() -> new OrderNotFoundException("Pedido " + orderId + " não encontrado"));
+        return orderRepositoryGateway.save(currentOrder);
     }
 
     private void validateStatusTransition(OrderStatus currentStatus, OrderStatus newStatus) {
@@ -71,10 +67,6 @@ public class UpdateOrderStatusUseCase {
 
         if (currentStatus.equals(OrderStatus.DELIVERED) && !newStatus.equals(OrderStatus.RETURNED)) {
             throw new InvalidStatusException("Pedidos entregues só podem ser marcados como devolvidos.");
-        }
-
-        if (currentStatus.equals(OrderStatus.CANCELED) && !newStatus.equals(OrderStatus.OPEN)) {
-            throw new InvalidStatusException("Pedidos cancelados só podem ser reabertos.");
         }
 
         if (currentStatus.equals(OrderStatus.RETURNED)) {

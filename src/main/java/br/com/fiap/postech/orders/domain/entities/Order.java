@@ -1,6 +1,7 @@
 package br.com.fiap.postech.orders.domain.entities;
 
 import br.com.fiap.postech.orders.domain.enums.OrderStatus;
+import br.com.fiap.postech.orders.domain.enums.PaymentMethod;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class Order {
 
     private OrderStatus status;
 
-    private UUID clientId;
+    private UUID customerId;
 
     private List<OrderItem> items = new ArrayList<>();
 
@@ -22,7 +23,7 @@ public class Order {
 
     private double totalAmount;
 
-    private String paymentMethod;
+    private PaymentMethod paymentMethod;
 
     private LocalDateTime estimatedDeliveryDate;
     private String trackingCode;
@@ -44,11 +45,11 @@ public class Order {
     public Order(
             UUID id,
             OrderStatus status,
-            UUID clientId,
+            UUID customerId,
             List<OrderItem> items,
             String deliveryAddress,
             double totalAmount,
-            String paymentMethod,
+            PaymentMethod paymentMethod,
             LocalDateTime estimatedDeliveryDate,
             String trackingCode,
             LocalDateTime createdAt,
@@ -56,7 +57,7 @@ public class Order {
             ) {
         this.id = id;
         this.status = status;
-        this.clientId = clientId;
+        this.customerId = customerId;
         this.items = items;
         this.deliveryAddress = deliveryAddress;
         this.totalAmount = totalAmount;
@@ -84,11 +85,11 @@ public class Order {
     }
 
     public UUID getCustomerId() {
-        return clientId;
+        return customerId;
     }
 
-    public void setClientId(UUID clientId) {
-        this.clientId = clientId;
+    public void setCustomerId(UUID customerId) {
+        this.customerId = customerId;
     }
 
     public List<OrderItem> getItems() {
@@ -111,11 +112,11 @@ public class Order {
         return totalAmount;
     }
 
-    public String getPaymentMethod() {
+    public PaymentMethod getPaymentMethod() {
         return paymentMethod;
     }
 
-    public void setPaymentMethod(String paymentMethod) {
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 
