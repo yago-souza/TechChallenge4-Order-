@@ -60,7 +60,6 @@ class UpdateOrderStatusUseCaseTest {
                 100.0,
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
-                "ABC123",
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -95,7 +94,6 @@ class UpdateOrderStatusUseCaseTest {
                 100.0,
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
-                "ABC123",
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -129,7 +127,6 @@ class UpdateOrderStatusUseCaseTest {
                 100.0,
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
-                "ABC123",
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -164,7 +161,6 @@ class UpdateOrderStatusUseCaseTest {
                 100.0,
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
-                "ABC123",
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -198,7 +194,6 @@ class UpdateOrderStatusUseCaseTest {
                 100.0,
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
-                "ABC123",
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -228,7 +223,6 @@ class UpdateOrderStatusUseCaseTest {
                 100.0,
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
-                "ABC123",
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -262,7 +256,6 @@ class UpdateOrderStatusUseCaseTest {
                 100.0,
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
-                "ABC123",
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -292,7 +285,6 @@ class UpdateOrderStatusUseCaseTest {
                 100.0,
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
-                "ABC123",
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -325,7 +317,6 @@ class UpdateOrderStatusUseCaseTest {
                 100.0,
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
-                "ABC123",
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -358,7 +349,6 @@ class UpdateOrderStatusUseCaseTest {
                 100.0,
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
-                "ABC123",
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -391,7 +381,6 @@ class UpdateOrderStatusUseCaseTest {
                 100.0,
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
-                "ABC123",
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );

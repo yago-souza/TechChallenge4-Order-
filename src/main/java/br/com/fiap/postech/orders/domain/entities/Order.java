@@ -51,7 +51,6 @@ public class Order {
             double totalAmount,
             PaymentMethod paymentMethod,
             LocalDateTime estimatedDeliveryDate,
-            String trackingCode,
             LocalDateTime createdAt,
             LocalDateTime updatedAt
             ) {
@@ -63,7 +62,6 @@ public class Order {
         this.totalAmount = totalAmount;
         this.paymentMethod = paymentMethod;
         this.estimatedDeliveryDate = estimatedDeliveryDate;
-        this.trackingCode = trackingCode;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -126,14 +124,6 @@ public class Order {
 
     public void setEstimatedDeliveryDate(LocalDateTime estimatedDeliveryDate) {
         this.estimatedDeliveryDate = estimatedDeliveryDate;
-    }
-
-    public String getTrackingCode() {
-        return trackingCode;
-    }
-
-    public void setTrackingCode(String trackingCode) {
-        this.trackingCode = trackingCode;
     }
 
     public LocalDateTime getCreatedAt() {

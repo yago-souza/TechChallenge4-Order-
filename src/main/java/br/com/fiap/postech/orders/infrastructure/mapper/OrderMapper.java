@@ -33,7 +33,6 @@ public class OrderMapper {
                 order.getTotalAmount(),
                 order.getPaymentMethod(),
                 order.getEstimatedDeliveryDate(),
-                order.getTrackingCode(),
                 order.getCreatedAt(),
                 order.getUpdatedAt()
         );
@@ -53,7 +52,6 @@ public class OrderMapper {
                 entity.getTotalAmount(),
                 entity.getPaymentMethod(),
                 entity.getEstimatedDeliveryDate(),
-                entity.getTrackingCode(),
                 entity.getCreatedAt(),
                 entity.getUpdatedAt()
         );

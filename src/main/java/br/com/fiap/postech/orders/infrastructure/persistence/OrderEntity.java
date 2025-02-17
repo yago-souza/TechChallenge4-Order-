@@ -42,7 +42,6 @@ public class OrderEntity {
     private PaymentMethod paymentMethod;
 
     private LocalDateTime estimatedDeliveryDate;
-    private String trackingCode;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
@@ -83,10 +82,6 @@ public class OrderEntity {
 
     public void setEstimatedDeliveryDate(LocalDateTime estimatedDeliveryDate) {
         this.estimatedDeliveryDate = estimatedDeliveryDate;
-    }
-
-    public void setTrackingCode(String trackingCode) {
-        this.trackingCode = trackingCode;
     }
 
     public void setCreatedAt(LocalDateTime createdAt) {

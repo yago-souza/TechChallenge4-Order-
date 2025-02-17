@@ -24,7 +24,6 @@ public record CreateOrderRequestDTO(
                 0.0, // Total será calculado no domínio
                 paymentMethod,
                 null, // estimatedDeliveryDate
-                null, // trackingCode
                 null, // createdAt
                 null  // updatedAt
         );

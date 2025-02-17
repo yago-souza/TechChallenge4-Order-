@@ -63,7 +63,6 @@ public class CreateOrderUsecaseTest {
                 100.0,
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
-                "ABC123",
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -105,7 +104,6 @@ public class CreateOrderUsecaseTest {
                 100.0,
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
-                "ABC123",
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -134,7 +132,6 @@ public class CreateOrderUsecaseTest {
                 100.0,
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
-                "ABC123",
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -172,7 +169,6 @@ public class CreateOrderUsecaseTest {
                 100.0,
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
-                "ABC123",
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -210,7 +206,6 @@ public class CreateOrderUsecaseTest {
                 100.0,
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
-                "ABC123",
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -238,7 +233,6 @@ public class CreateOrderUsecaseTest {
                 100.0,
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
-                "ABC123",
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -263,7 +257,6 @@ public class CreateOrderUsecaseTest {
                 -100.0, // Valor inválido
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
-                "ABC123",
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -297,7 +290,6 @@ public class CreateOrderUsecaseTest {
                 100.0,
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
-                "ABC123",
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -324,7 +316,6 @@ public class CreateOrderUsecaseTest {
                 100.0,
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
-                "ABC123",
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -334,32 +325,5 @@ public class CreateOrderUsecaseTest {
         when(customerGateway.getCustomerById(customerId)).thenReturn(customer);
 
         assertThrows(InvalidAddressException.class, () -> createOrderUsecase.execute(order));
-    }
-
-    @Test
-    void testCreateOrder_WhenTrackingCodeIsNull_ShouldThrowException() {
-        UUID customerId = UUID.randomUUID();
-        UUID productId = UUID.randomUUID();
-
-        OrderItem item = new OrderItem(UUID.randomUUID(), productId, -2, 50.0, -100.0);
-        Order order = new Order(
-                UUID.randomUUID(),
-                OrderStatus.OPEN,
-                customerId,
-                List.of(item),
-                "Rua Exemplo, 123",
-                100.0,
-                PaymentMethod.CREDIT_CARD,
-                LocalDateTime.now(),
-                "",
-                LocalDateTime.now(),
-                LocalDateTime.now()
-        );
-
-        // Simulação de um cliente válido retornado pelo ClientGateway
-        Customer customer = new Customer(customerId, "Test Client", "test@test.com", "teste, 123, teste");
-        when(customerGateway.getCustomerById(customerId)).thenReturn(customer);
-
-        assertThrows(InvalidTrackingCodeException.class, () -> createOrderUsecase.execute(order));
     }
 }

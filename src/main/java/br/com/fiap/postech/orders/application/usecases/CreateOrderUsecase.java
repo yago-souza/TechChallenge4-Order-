@@ -52,10 +52,6 @@ public class CreateOrderUsecase {
             throw new InvalidAddressException("O endereço de entrega não pode ser nulo ou vazio.");
         }
 
-        if (!StringUtils.hasText(order.getTrackingCode())) {
-            throw new InvalidTrackingCodeException("O código de rastreamento não pode ser nulo ou vazio.");
-        }
-
         if (order.getItems().isEmpty()) {
             throw new NoItemException("Pedido vazio.");
         }
