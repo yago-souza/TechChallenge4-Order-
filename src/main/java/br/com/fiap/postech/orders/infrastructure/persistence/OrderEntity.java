@@ -1,5 +1,6 @@
 package br.com.fiap.postech.orders.infrastructure.persistence;
 
+import br.com.fiap.postech.orders.domain.entities.Address;
 import br.com.fiap.postech.orders.domain.enums.OrderStatus;
 import br.com.fiap.postech.orders.domain.enums.PaymentMethod;
 import jakarta.persistence.*;
@@ -33,7 +34,7 @@ public class OrderEntity {
     private List<OrderItemEntity> items = new ArrayList<>();
 
     @Column(nullable = false)
-    private String deliveryAddress;
+    private Address deliveryAddress;
 
     @Column(nullable = false)
     private double totalAmount;
@@ -72,7 +73,7 @@ public class OrderEntity {
         this.items = items;
     }
 
-    public void setDeliveryAddress(String deliveryAddress) {
+    public void setDeliveryAddress(Address deliveryAddress) {
         this.deliveryAddress = deliveryAddress;
     }
 

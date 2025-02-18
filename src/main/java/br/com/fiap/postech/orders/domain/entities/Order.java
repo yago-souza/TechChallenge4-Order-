@@ -19,7 +19,7 @@ public class Order {
 
     private List<OrderItem> items = new ArrayList<>();
 
-    private String deliveryAddress;
+    private Address deliveryAddress;
 
     private double totalAmount;
 
@@ -45,7 +45,7 @@ public class Order {
             OrderStatus status,
             UUID customerId,
             List<OrderItem> items,
-            String deliveryAddress,
+            Address deliveryAddress,
             PaymentMethod paymentMethod,
             LocalDateTime estimatedDeliveryDate,
             LocalDateTime createdAt
@@ -91,11 +91,11 @@ public class Order {
         this.items = items;
     }
 
-    public String getDeliveryAddress() {
+    public Address getDeliveryAddress() {
         return deliveryAddress;
     }
 
-    public void setDeliveryAddress(String deliveryAddress) {
+    public void setDeliveryAddress(Address deliveryAddress) {
         this.deliveryAddress = deliveryAddress;
     }
 

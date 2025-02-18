@@ -47,7 +47,7 @@ public class CreateOrderUsecase {
             throw new CustomerNotFoundException("Cliente não encontrado para o ID: " + order.getCustomerId());
         }
 
-        if (!StringUtils.hasText(order.getDeliveryAddress())) {
+        if (order.getDeliveryAddress() == null) {
             throw new InvalidAddressException("O endereço de entrega não pode ser nulo ou vazio.");
         }
 
@@ -70,9 +70,5 @@ public class CreateOrderUsecase {
                 throw new InsufficientStockException("Estoque insuficiente para o produto: " + item.getProductId());
             }
         });
-
-        if (order.getTotalAmount() < 0) {
-            throw new InvalidTotalAmountException("O valor total do pedido não pode ser negativo.");
-        }
     }
 }

@@ -1,5 +1,6 @@
 package br.com.fiap.postech.orders.application.usecases;
 
+import br.com.fiap.postech.orders.domain.entities.Address;
 import br.com.fiap.postech.orders.domain.entities.Order;
 import br.com.fiap.postech.orders.domain.entities.OrderItem;
 import br.com.fiap.postech.orders.domain.enums.OrderStatus;
@@ -58,7 +59,14 @@ class CreateOrderUsecaseTest {
                 OrderStatus.OPEN,
                 customerId,
                 List.of(item),
-                "Rua Exemplo, 123",
+                new Address("Rua teste",
+                        "123",
+                        "Teste",
+                        "Bairro teste",
+                        "Cidade Teste",
+                        "Estado Teste",
+                        "Pais Teste",
+                        "12345-678"),
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
                 LocalDateTime.now()
@@ -96,7 +104,14 @@ class CreateOrderUsecaseTest {
                 OrderStatus.OPEN,
                 customerId,
                 List.of(new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0)),
-                "Rua Exemplo, 123",
+                new Address("Rua teste",
+                        "123",
+                        "Teste",
+                        "Bairro teste",
+                        "Cidade Teste",
+                        "Estado Teste",
+                        "Pais Teste",
+                        "12345-678"),
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
                 LocalDateTime.now()
@@ -121,7 +136,14 @@ class CreateOrderUsecaseTest {
                 OrderStatus.OPEN,
                 customerId,
                 List.of(new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0)),
-                "Rua Exemplo, 123",
+                new Address("Rua teste",
+                        "123",
+                        "Teste",
+                        "Bairro teste",
+                        "Cidade Teste",
+                        "Estado Teste",
+                        "Pais Teste",
+                        "12345-678"),
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
                 LocalDateTime.now()
@@ -155,7 +177,14 @@ class CreateOrderUsecaseTest {
                 OrderStatus.OPEN,
                 customerId,
                 List.of(item),
-                "Rua Exemplo, 123",
+                new Address("Rua teste",
+                        "123",
+                        "Teste",
+                        "Bairro teste",
+                        "Cidade Teste",
+                        "Estado Teste",
+                        "Pais Teste",
+                        "12345-678"),
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
                 LocalDateTime.now()
@@ -189,7 +218,14 @@ class CreateOrderUsecaseTest {
                 OrderStatus.OPEN,
                 customerId,
                 List.of(), // Sem itens
-                "Rua Exemplo, 123",
+                new Address("Rua teste",
+                        "123",
+                        "Teste",
+                        "Bairro teste",
+                        "Cidade Teste",
+                        "Estado Teste",
+                        "Pais Teste",
+                        "12345-678"),
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
                 LocalDateTime.now()
@@ -213,7 +249,14 @@ class CreateOrderUsecaseTest {
                 OrderStatus.OPEN,
                 null, // Sem cliente
                 List.of(item),
-                "Rua Exemplo, 123",
+                new Address("Rua teste",
+                        "123",
+                        "Teste",
+                        "Bairro teste",
+                        "Cidade Teste",
+                        "Estado Teste",
+                        "Pais Teste",
+                        "12345-678"),
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
                 LocalDateTime.now()
@@ -233,7 +276,14 @@ class CreateOrderUsecaseTest {
                 OrderStatus.OPEN,
                 customerId,
                 List.of(item),
-                "Rua Exemplo, 123",
+                new Address("Rua teste",
+                        "123",
+                        "Teste",
+                        "Bairro teste",
+                        "Cidade Teste",
+                        "Estado Teste",
+                        "Pais Teste",
+                        "12345-678"),
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
                 LocalDateTime.now()
@@ -286,7 +336,7 @@ class CreateOrderUsecaseTest {
                 OrderStatus.OPEN,
                 customerId,
                 List.of(item),
-                "",
+                null,
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
                 LocalDateTime.now()

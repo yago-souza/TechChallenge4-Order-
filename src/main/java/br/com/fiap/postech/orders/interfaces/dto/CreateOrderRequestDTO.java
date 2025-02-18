@@ -1,5 +1,6 @@
 package br.com.fiap.postech.orders.interfaces.dto;
 
+import br.com.fiap.postech.orders.domain.entities.Address;
 import br.com.fiap.postech.orders.domain.entities.Order;
 import br.com.fiap.postech.orders.domain.enums.PaymentMethod;
 import jakarta.validation.constraints.NotEmpty;
@@ -15,7 +16,7 @@ public record CreateOrderRequestDTO(
         @NotEmpty(message = "A lista de itens não pode estar vazia")
         @Validated List<OrderItemRequestDTO> items,
         @NotEmpty(message = "O endereço não pode estar vazio")
-        @Validated String deliveryAddress,
+        @Validated Address deliveryAddress,
         @NotNull(message = "O método de pagamento é obrigatório")
         @Validated PaymentMethod paymentMethod
 ) {

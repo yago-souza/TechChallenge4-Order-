@@ -1,6 +1,7 @@
 package br.com.fiap.postech.orders.application.controller;
 
 import br.com.fiap.postech.orders.application.usecases.*;
+import br.com.fiap.postech.orders.domain.entities.Address;
 import br.com.fiap.postech.orders.domain.entities.Order;
 import br.com.fiap.postech.orders.domain.entities.OrderItem;
 import br.com.fiap.postech.orders.domain.enums.OrderStatus;
@@ -82,7 +83,7 @@ class OrderControllerTest {
                                 29.0
                         )
                 ),
-                "Rua das Flores, 123",
+                new Address("Rua teste", "123", "Teste", "Bairro teste", "Cidade Teste", "Estado Teste", "Pais Teste", "12345-678"),
                 PaymentMethod.CREDIT_CARD
         );
 
@@ -98,7 +99,7 @@ class OrderControllerTest {
                                 29.90
                         )
                 ),
-                "Rua das Flores, 123",
+                new Address("Rua teste", "123", "Teste", "Bairro teste", "Cidade Teste", "Estado Teste", "Pais Teste", "12345-678"),
                 PaymentMethod.CREDIT_CARD,
                 null,
                 null
@@ -124,7 +125,7 @@ class OrderControllerTest {
         CreateOrderRequestDTO invalidRequest = new CreateOrderRequestDTO(
                 null, // customerId inválido
                 Collections.emptyList(), // items vazio
-                "", // endereço vazio
+                null, // endereço vazio
                 null // método de pagamento inválido
         );
 
@@ -140,7 +141,22 @@ class OrderControllerTest {
         // Arrange
         UUID orderId = UUID.randomUUID();
         OrderItem newItem = new OrderItem(UUID.randomUUID(), UUID.randomUUID(), 2, 100.0, 200.0);
-        Order order = new Order(OrderStatus.OPEN, orderId, List.of(newItem), "Address", null, null, null);
+        Order order = new Order(
+                OrderStatus.OPEN,
+                orderId, List.of(newItem),
+                new Address("Rua teste",
+                        "123",
+                        "Teste",
+                        "Bairro teste",
+                        "Cidade Teste",
+                        "Estado Teste",
+                        "Pais Teste",
+                        "12345-678"),
+                null,
+                null,
+                null);
+
+
 
         AddItemToOrderRequestDTO request = new AddItemToOrderRequestDTO(UUID.randomUUID(), 2, 100.0);
         when(addItemToOrderUseCase.execute(any(UUID.class), any(OrderItem.class))).thenReturn(order);
@@ -158,7 +174,25 @@ class OrderControllerTest {
         // Arrange
         UUID orderId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
-        Order order = new Order(OrderStatus.OPEN, orderId, List.of(new OrderItem(UUID.randomUUID(), productId, 1, 50.0, 50.0)), "Address", null, null, null);
+        Order order = new Order(
+                OrderStatus.OPEN,
+                orderId,
+                List.of(new OrderItem(UUID.randomUUID(),
+                        productId,
+                        1,
+                        50.0,
+                        50.0)),
+                new Address("Rua teste",
+                        "123",
+                        "Teste",
+                        "Bairro teste",
+                        "Cidade Teste",
+                        "Estado Teste",
+                        "Pais Teste",
+                        "12345-678"),
+                null,
+                null,
+                null);
         when(removeItemFromOrderUseCase.execute(orderId, productId)).thenReturn(order);
 
         // Act
@@ -175,7 +209,21 @@ class OrderControllerTest {
         // Arrange
         UUID orderId = UUID.randomUUID();
         UpdateOrderStatusRequestDTO request = new UpdateOrderStatusRequestDTO(OrderStatus.SHIPPED);
-        Order order = new Order(OrderStatus.SHIPPED, orderId, List.of(), "Address", null, null, null);
+        Order order = new Order(
+                OrderStatus.SHIPPED,
+                orderId,
+                List.of(),
+                new Address("Rua teste",
+                        "123",
+                        "Teste",
+                        "Bairro teste",
+                        "Cidade Teste",
+                        "Estado Teste",
+                        "Pais Teste",
+                        "12345-678"),
+                null,
+                null,
+                null);
         when(updateOrderStatusUseCase.execute(orderId, OrderStatus.SHIPPED)).thenReturn(order);
 
         // Act
@@ -191,7 +239,21 @@ class OrderControllerTest {
     void testListOrders_ShouldReturnOrderList() {
         // Arrange
         UUID customerId = UUID.randomUUID();
-        Order order = new Order(OrderStatus.OPEN, customerId, List.of(), "Address", null, null, null);
+        Order order = new Order(
+                OrderStatus.OPEN,
+                customerId,
+                List.of(),
+                new Address("Rua teste",
+                        "123",
+                        "Teste",
+                        "Bairro teste",
+                        "Cidade Teste",
+                        "Estado Teste",
+                        "Pais Teste",
+                        "12345-678"),
+                null,
+                null,
+                null);
         when(listOrdersUseCase.execute(customerId, OrderStatus.OPEN)).thenReturn(List.of(order));
 
         // Act

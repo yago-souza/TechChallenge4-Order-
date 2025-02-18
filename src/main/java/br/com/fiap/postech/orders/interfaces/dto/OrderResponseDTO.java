@@ -1,5 +1,6 @@
 package br.com.fiap.postech.orders.interfaces.dto;
 
+import br.com.fiap.postech.orders.domain.entities.Address;
 import br.com.fiap.postech.orders.domain.entities.Order;
 import br.com.fiap.postech.orders.domain.entities.OrderItem;
 import br.com.fiap.postech.orders.domain.enums.OrderStatus;
@@ -14,7 +15,7 @@ public record OrderResponseDTO(
         OrderStatus status,
         UUID customerId,
         List<OrderItemResponseDTO> items,
-        String deliveryAddress,
+        Address deliveryAddress,
         double totalAmount,
         PaymentMethod paymentMethod,
         LocalDateTime estimatedDeliveryDate,
