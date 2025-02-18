@@ -16,7 +16,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-public class ListOrdersUseCaseTest {
+class ListOrdersUseCaseTest {
     @InjectMocks
     private ListOrdersUseCase  listOrdersUseCase;
 

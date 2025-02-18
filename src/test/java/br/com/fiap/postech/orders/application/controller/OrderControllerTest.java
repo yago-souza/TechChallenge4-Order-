@@ -1,4 +1,4 @@
-package br.com.fiap.postech.orders.application.controllers;
+package br.com.fiap.postech.orders.application.controller;
 
 import br.com.fiap.postech.orders.application.usecases.CreateOrderUsecase;
 import br.com.fiap.postech.orders.domain.entities.Order;

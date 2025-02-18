@@ -3,15 +3,16 @@ package br.com.fiap.postech.orders.interfaces.dto;
 import br.com.fiap.postech.orders.domain.entities.Order;
 import br.com.fiap.postech.orders.domain.enums.PaymentMethod;
 import org.antlr.v4.runtime.misc.NotNull;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 import java.util.UUID;
 
 public record CreateOrderRequestDTO(
-        @NotNull UUID customerId,
-        @NotNull List<OrderItemRequestDTO> items,
-        @NotNull String deliveryAddress,
-        @NotNull PaymentMethod paymentMethod
+        @Validated UUID customerId,
+        @Validated List<OrderItemRequestDTO> items,
+        @Validated String deliveryAddress,
+        @Validated PaymentMethod paymentMethod
 ) {
     // Método para converter DTO -> Domínio
     public Order toDomain() {

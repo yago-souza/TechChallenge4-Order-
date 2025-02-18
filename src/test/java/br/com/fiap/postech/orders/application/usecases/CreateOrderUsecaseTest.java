@@ -4,10 +4,10 @@ import br.com.fiap.postech.orders.domain.entities.Order;
 import br.com.fiap.postech.orders.domain.entities.OrderItem;
 import br.com.fiap.postech.orders.domain.enums.OrderStatus;
 import br.com.fiap.postech.orders.domain.enums.PaymentMethod;
-import br.com.fiap.postech.orders.infrastructure.API.CustomerGateway;
-import br.com.fiap.postech.orders.infrastructure.API.ProductGateway;
-import br.com.fiap.postech.orders.infrastructure.API.models.Customer;
-import br.com.fiap.postech.orders.infrastructure.API.models.Product;
+import br.com.fiap.postech.orders.infrastructure.api.CustomerGateway;
+import br.com.fiap.postech.orders.infrastructure.api.ProductGateway;
+import br.com.fiap.postech.orders.infrastructure.api.models.Customer;
+import br.com.fiap.postech.orders.infrastructure.api.models.Product;
 import br.com.fiap.postech.orders.infrastructure.exception.*;
 import br.com.fiap.postech.orders.infrastructure.gateway.impl.OrderRepositoryGatewayImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class CreateOrderUsecaseTest {
+class CreateOrderUsecaseTest {
 
     @InjectMocks
     private CreateOrderUsecase createOrderUsecase;
@@ -91,7 +91,7 @@ public class CreateOrderUsecaseTest {
 
 
     @Test
-    public void testCreateOrder_ClientNotFound_ShouldThrowException() {
+    void testCreateOrder_ClientNotFound_ShouldThrowException() {
         UUID customerId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
 
@@ -119,7 +119,7 @@ public class CreateOrderUsecaseTest {
     }
 
     @Test
-    public void testCreateOrder_ProductNotFound_ShouldThrowException() {
+    void testCreateOrder_ProductNotFound_ShouldThrowException() {
         UUID customerId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
 
@@ -154,7 +154,7 @@ public class CreateOrderUsecaseTest {
     }
 
     @Test
-    public void testCreateOrder_InsufficientStock_ShouldThrowException() {
+    void testCreateOrder_InsufficientStock_ShouldThrowException() {
         UUID customerId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
 
@@ -195,7 +195,7 @@ public class CreateOrderUsecaseTest {
     }
 
     @Test
-    public void testCreateOrder_NoItems_ShouldThrowException() {
+    void testCreateOrder_NoItems_ShouldThrowException() {
         UUID customerId = UUID.randomUUID();
         Order order = new Order(
                 UUID.randomUUID(),
@@ -221,7 +221,7 @@ public class CreateOrderUsecaseTest {
     }
 
     @Test
-    public void testCreateOrder_NoCustomer_ShouldThrowException() {
+    void testCreateOrder_NoCustomer_ShouldThrowException() {
         UUID productId = UUID.randomUUID();
         OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0);
         Order order = new Order(
@@ -243,7 +243,7 @@ public class CreateOrderUsecaseTest {
     }
 
     @Test
-    public void testCreateOrder_NegativeQuantity_ShouldThrowException() {
+    void testCreateOrder_NegativeQuantity_ShouldThrowException() {
         UUID customerId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
 

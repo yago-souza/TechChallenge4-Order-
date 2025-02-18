@@ -1,6 +1,6 @@
-package br.com.fiap.postech.orders.infrastructure.API;
+package br.com.fiap.postech.orders.infrastructure.api;
 
-import br.com.fiap.postech.orders.infrastructure.API.models.Customer;
+import br.com.fiap.postech.orders.infrastructure.api.models.Customer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -10,7 +10,7 @@ import java.util.UUID;
 public class RestTemplateCustomerGateway implements CustomerGateway {
 
     private final RestTemplate restTemplate;
-    private final String clientServiceUrl = "http://localhost:8081/clients";
+    private static final String CLIENT_SERVICE_URL = "http://localhost:8081/clients";
 
     public RestTemplateCustomerGateway(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
@@ -18,7 +18,7 @@ public class RestTemplateCustomerGateway implements CustomerGateway {
 
     @Override
     public Customer getCustomerById(UUID customerId) {
-        String url = clientServiceUrl + "/" + customerId;
+        String url = CLIENT_SERVICE_URL + "/" + customerId;
         return restTemplate.getForObject(url, Customer.class);
     }
 }

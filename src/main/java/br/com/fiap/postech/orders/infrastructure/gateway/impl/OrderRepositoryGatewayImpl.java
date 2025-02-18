@@ -30,7 +30,7 @@ public class OrderRepositoryGatewayImpl implements OrderRepositoryGateway {
         OrderEntity entity = orderRepository
                 .findById(id)
                 .orElseThrow(() -> new OrderNotFoundException("Pedido não encontrado"));
-        return null;
+        return orderMapper.toModel(entity);
     }
 
     @Override
@@ -55,25 +55,22 @@ public class OrderRepositoryGatewayImpl implements OrderRepositoryGateway {
 
     public List<Order> findByCustomerIdAndStatus(UUID customerId, OrderStatus status) {
         List<OrderEntity> orderEntityList = orderRepository.findByCustomerIdAndStatus(customerId, status);
-        List<Order> orderList = orderEntityList.stream()
+        return orderEntityList.stream()
                 .map(orderMapper::toModel)
                 .collect(Collectors.toList());
-        return orderList;
     }
 
     public List<Order> findByCustomerId(UUID customerId) {
         List<OrderEntity> orderEntityList = orderRepository.findByCustomerId(customerId);
-        List<Order> orderList = orderEntityList.stream()
+        return orderEntityList.stream()
                 .map(orderMapper::toModel)
                 .collect(Collectors.toList());
-        return orderList;
     }
 
     public List<Order> findByStatus(OrderStatus orderStatus) {
         List<OrderEntity> orderEntityList = orderRepository.findByStatus(orderStatus);
-        List<Order> orderList = orderEntityList.stream()
+        return orderEntityList.stream()
                 .map(orderMapper::toModel)
                 .collect(Collectors.toList());
-        return orderList;
     }
 }

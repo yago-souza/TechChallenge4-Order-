@@ -26,7 +26,6 @@ public class Order {
     private PaymentMethod paymentMethod;
 
     private LocalDateTime estimatedDeliveryDate;
-    private String trackingCode;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

@@ -1,4 +1,4 @@
-package br.com.fiap.postech.orders.infrastructure.API.models;
+package br.com.fiap.postech.orders.infrastructure.api.models;
 
 import java.util.UUID;
 

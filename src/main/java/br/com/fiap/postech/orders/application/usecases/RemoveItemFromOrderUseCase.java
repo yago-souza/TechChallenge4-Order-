@@ -42,11 +42,6 @@ public class RemoveItemFromOrderUseCase {
         // Remover o item
         order.removeItem(itemToRemove);
 
-        // Recalcular o total do pedido
-        double newTotalAmount = order.getItems().stream()
-                .mapToDouble(OrderItem::getTotalPrice)
-                .sum();
-
         // Salvar o pedido atualizado
         return orderRepositoryGateway.save(order);
     }

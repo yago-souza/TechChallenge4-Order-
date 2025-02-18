@@ -1,12 +1,11 @@
 package br.com.fiap.postech.orders.application.usecases;
 
 import br.com.fiap.postech.orders.domain.enums.OrderStatus;
-import br.com.fiap.postech.orders.domain.enums.PaymentMethod;
-import br.com.fiap.postech.orders.infrastructure.API.models.Customer;
-import br.com.fiap.postech.orders.infrastructure.API.models.Product;
+import br.com.fiap.postech.orders.infrastructure.api.models.Customer;
+import br.com.fiap.postech.orders.infrastructure.api.models.Product;
 import br.com.fiap.postech.orders.domain.entities.Order;
-import br.com.fiap.postech.orders.infrastructure.API.CustomerGateway;
-import br.com.fiap.postech.orders.infrastructure.API.ProductGateway;
+import br.com.fiap.postech.orders.infrastructure.api.CustomerGateway;
+import br.com.fiap.postech.orders.infrastructure.api.ProductGateway;
 import br.com.fiap.postech.orders.infrastructure.exception.*;
 import br.com.fiap.postech.orders.infrastructure.gateway.impl.OrderRepositoryGatewayImpl;
 import jakarta.transaction.Transactional;

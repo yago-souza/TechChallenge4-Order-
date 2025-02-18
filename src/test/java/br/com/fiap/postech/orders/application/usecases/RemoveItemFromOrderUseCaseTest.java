@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-public class RemoveItemFromOrderUseCaseTest {
+class RemoveItemFromOrderUseCaseTest {
 
     @InjectMocks
     private RemoveItemFromOrderUseCase removeItemFromOrderUseCase;
