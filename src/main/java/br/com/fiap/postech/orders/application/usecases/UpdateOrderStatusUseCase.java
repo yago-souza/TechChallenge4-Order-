@@ -3,13 +3,10 @@ package br.com.fiap.postech.orders.application.usecases;
 import br.com.fiap.postech.orders.domain.entities.Order;
 import br.com.fiap.postech.orders.domain.enums.OrderStatus;
 import br.com.fiap.postech.orders.infrastructure.exception.InvalidStatusException;
-import br.com.fiap.postech.orders.infrastructure.exception.OrderNotFoundException;
 import br.com.fiap.postech.orders.infrastructure.gateway.impl.OrderRepositoryGatewayImpl;
-import br.com.fiap.postech.orders.infrastructure.persistence.OrderRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.UUID;
 
 @Service
@@ -42,40 +39,27 @@ public class UpdateOrderStatusUseCase {
         }
 
         // 2. Verifica se o pedido está em um status final
-        if (currentStatus.equals(OrderStatus.DELIVERED) ||
-                currentStatus.equals(OrderStatus.CANCELED) ||
-                currentStatus.equals(OrderStatus.RETURNED)) {
+        if (currentStatus == OrderStatus.DELIVERED ||
+                currentStatus == OrderStatus.CANCELED ||
+                currentStatus == OrderStatus.RETURNED) {
             throw new InvalidStatusException("Pedidos em status final não podem ser alterados.");
         }
 
         // 3. Verifica transições inválidas
-        if (currentStatus.equals(OrderStatus.OPEN) && !newStatus.equals(OrderStatus.PAID) && !newStatus.equals(OrderStatus.CANCELED)) {
+        if (currentStatus == OrderStatus.OPEN && newStatus != OrderStatus.PAID && newStatus != OrderStatus.CANCELED) {
             throw new InvalidStatusException("Pedidos abertos só podem ser marcados como pagos ou cancelados.");
         }
 
-        if (currentStatus.equals(OrderStatus.PAID) && !newStatus.equals(OrderStatus.PROCESSING) && !newStatus.equals(OrderStatus.CANCELED)) {
+        if (currentStatus == OrderStatus.PAID && newStatus != OrderStatus.PROCESSING && newStatus != OrderStatus.CANCELED) {
             throw new InvalidStatusException("Pedidos pagos só podem ser processados ou cancelados.");
         }
 
-        if (currentStatus.equals(OrderStatus.PROCESSING) && !newStatus.equals(OrderStatus.SHIPPED) && !newStatus.equals(OrderStatus.CANCELED)) {
+        if (currentStatus == OrderStatus.PROCESSING && newStatus != OrderStatus.SHIPPED && newStatus != OrderStatus.CANCELED) {
             throw new InvalidStatusException("Pedidos em processamento só podem ser enviados ou cancelados.");
         }
 
-        if (currentStatus.equals(OrderStatus.SHIPPED) && !newStatus.equals(OrderStatus.DELIVERED)) {
+        if (currentStatus == OrderStatus.SHIPPED && newStatus != OrderStatus.DELIVERED) {
             throw new InvalidStatusException("Pedidos enviados só podem ser marcados como entregues.");
-        }
-
-        if (currentStatus.equals(OrderStatus.DELIVERED) && !newStatus.equals(OrderStatus.RETURNED)) {
-            throw new InvalidStatusException("Pedidos entregues só podem ser marcados como devolvidos.");
-        }
-
-        if (currentStatus.equals(OrderStatus.RETURNED)) {
-            throw new InvalidStatusException("Pedidos devolvidos não podem ser alterados.");
-        }
-
-        // 4. Verifica se o novo status é válido
-        if (!Arrays.asList(OrderStatus.values()).contains(newStatus)) {
-            throw new InvalidStatusException("Status inválido: " + newStatus);
         }
     }
 }

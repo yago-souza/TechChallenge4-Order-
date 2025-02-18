@@ -55,14 +55,11 @@ class CreateOrderUsecaseTest {
 
         // Criação do pedido real
         Order order = new Order(
-                UUID.randomUUID(),
                 OrderStatus.OPEN,
                 customerId,
                 List.of(item),
                 "Rua Exemplo, 123",
-                100.0,
                 PaymentMethod.CREDIT_CARD,
-                LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -96,14 +93,11 @@ class CreateOrderUsecaseTest {
         UUID productId = UUID.randomUUID();
 
         Order order = new Order(
-                UUID.randomUUID(),
                 OrderStatus.OPEN,
                 customerId,
                 List.of(new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0)),
                 "Rua Exemplo, 123",
-                100.0,
                 PaymentMethod.CREDIT_CARD,
-                LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -124,14 +118,11 @@ class CreateOrderUsecaseTest {
         UUID productId = UUID.randomUUID();
 
         Order order = new Order(
-                UUID.randomUUID(),
                 OrderStatus.OPEN,
                 customerId,
                 List.of(new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0)),
                 "Rua Exemplo, 123",
-                100.0,
                 PaymentMethod.CREDIT_CARD,
-                LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -161,14 +152,11 @@ class CreateOrderUsecaseTest {
         // Simulação de um item do pedido com quantidade maior do que o estoque disponível
         OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0);
         Order order = new Order(
-                UUID.randomUUID(),
                 OrderStatus.OPEN,
                 customerId,
                 List.of(item),
                 "Rua Exemplo, 123",
-                100.0,
                 PaymentMethod.CREDIT_CARD,
-                LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -198,14 +186,11 @@ class CreateOrderUsecaseTest {
     void testCreateOrder_NoItems_ShouldThrowException() {
         UUID customerId = UUID.randomUUID();
         Order order = new Order(
-                UUID.randomUUID(),
                 OrderStatus.OPEN,
                 customerId,
                 List.of(), // Sem itens
                 "Rua Exemplo, 123",
-                100.0,
                 PaymentMethod.CREDIT_CARD,
-                LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -225,18 +210,14 @@ class CreateOrderUsecaseTest {
         UUID productId = UUID.randomUUID();
         OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0);
         Order order = new Order(
-                UUID.randomUUID(),
                 OrderStatus.OPEN,
                 null, // Sem cliente
                 List.of(item),
                 "Rua Exemplo, 123",
-                100.0,
                 PaymentMethod.CREDIT_CARD,
-                LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
-
 
         assertThrows(NoCustomerException.class, () -> createOrderUsecase.execute(order));
         verify(orderRepositoryGateway, never()).save(order);
@@ -249,14 +230,11 @@ class CreateOrderUsecaseTest {
 
         OrderItem item = new OrderItem(UUID.randomUUID(), productId, -2, 50.0, -100.0);
         Order order = new Order(
-                UUID.randomUUID(),
                 OrderStatus.OPEN,
                 customerId,
                 List.of(item),
                 "Rua Exemplo, 123",
-                -100.0, // Valor inválido
                 PaymentMethod.CREDIT_CARD,
-                LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -282,14 +260,11 @@ class CreateOrderUsecaseTest {
 
         OrderItem item = new OrderItem(UUID.randomUUID(), productId, -2, 50.0, -100.0);
         Order order = new Order(
-                UUID.randomUUID(),
                 OrderStatus.OPEN,
                 customerId,
                 List.of(item),
                 null,
-                100.0,
                 PaymentMethod.CREDIT_CARD,
-                LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -308,14 +283,11 @@ class CreateOrderUsecaseTest {
 
         OrderItem item = new OrderItem(UUID.randomUUID(), productId, -2, 50.0, -100.0);
         Order order = new Order(
-                UUID.randomUUID(),
                 OrderStatus.OPEN,
                 customerId,
                 List.of(item),
                 "",
-                100.0,
                 PaymentMethod.CREDIT_CARD,
-                LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );

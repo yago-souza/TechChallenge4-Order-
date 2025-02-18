@@ -1,7 +1,6 @@
 package br.com.fiap.postech.orders.interfaces.dto;
 
 import br.com.fiap.postech.orders.domain.entities.OrderItem;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.validation.annotation.Validated;
 
 import java.util.UUID;

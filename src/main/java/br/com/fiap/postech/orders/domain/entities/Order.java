@@ -42,27 +42,21 @@ public class Order {
     }
 
     public Order(
-            UUID id,
             OrderStatus status,
             UUID customerId,
             List<OrderItem> items,
             String deliveryAddress,
-            double totalAmount,
             PaymentMethod paymentMethod,
             LocalDateTime estimatedDeliveryDate,
-            LocalDateTime createdAt,
-            LocalDateTime updatedAt
+            LocalDateTime createdAt
             ) {
-        this.id = id;
         this.status = status;
         this.customerId = customerId;
         this.items = items;
         this.deliveryAddress = deliveryAddress;
-        this.totalAmount = totalAmount;
         this.paymentMethod = paymentMethod;
         this.estimatedDeliveryDate = estimatedDeliveryDate;
         this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
     public UUID getId() {

@@ -14,10 +14,10 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class TrackOrderUseCaseTest {
+class GetOrderUseCaseTest {
 
     @InjectMocks
-    private TrackOrderUseCase trackOrderUseCase;
+    private GetOrderUseCase getOrderUseCase;
 
     @Mock
     private OrderRepositoryGatewayImpl orderRepositoryGateway;
@@ -37,17 +37,16 @@ class TrackOrderUseCaseTest {
     void shouldReturnOrderDetailsSuccessfully() {
         when(orderRepositoryGateway.findById(orderId)).thenReturn(order);
 
-        Order trackedOrder = trackOrderUseCase.execute(orderId);
+        Order trackedOrder = getOrderUseCase.execute(orderId);
 
         assertNotNull(trackedOrder);
         assertEquals(orderId, trackedOrder.getId());
-        //verify(orderRepositoryGateway, times(1)).findById(orderId);
     }
 
     @Test
     void shouldThrowExceptionWhenOrderNotFound() {
         when(orderRepositoryGateway.findById(orderId)).thenReturn(null);
 
-        assertThrows(OrderNotFoundException.class, () -> trackOrderUseCase.execute(orderId));
+        assertThrows(OrderNotFoundException.class, () -> getOrderUseCase.execute(orderId));
     }
 }

@@ -7,7 +7,6 @@ import br.com.fiap.postech.orders.infrastructure.persistence.OrderItemEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class OrderMapper {
@@ -21,7 +20,7 @@ public class OrderMapper {
         // Usando stream().map() para transformar a lista de OrderItem em OrderItemEntity
         List<OrderItemEntity> orderItems = order.getItems().stream()
                 .map(orderItemMapper::toEntity) // Mapeia cada OrderItem para OrderItemEntity
-                .collect(Collectors.toList()); // Coleta os resultados em uma lista
+                .toList(); // Coleta os resultados em uma lista
 
 
         return new OrderEntity(
@@ -41,19 +40,16 @@ public class OrderMapper {
     public Order toModel(OrderEntity entity) {
         List<OrderItem> orderItems = entity.getItems().stream()
                 .map(orderItemMapper::toModel)
-                .collect(Collectors.toList());
+                .toList();
 
         return new Order(
-                entity.getId(),
                 entity.getStatus(),
                 entity.getCustomerId(),
                 orderItems,
                 entity.getDeliveryAddress(),
-                entity.getTotalAmount(),
                 entity.getPaymentMethod(),
                 entity.getEstimatedDeliveryDate(),
-                entity.getCreatedAt(),
-                entity.getUpdatedAt()
+                entity.getCreatedAt()
         );
     }
 }

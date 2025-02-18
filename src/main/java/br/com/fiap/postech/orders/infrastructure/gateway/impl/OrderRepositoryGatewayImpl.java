@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -57,20 +56,20 @@ public class OrderRepositoryGatewayImpl implements OrderRepositoryGateway {
         List<OrderEntity> orderEntityList = orderRepository.findByCustomerIdAndStatus(customerId, status);
         return orderEntityList.stream()
                 .map(orderMapper::toModel)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<Order> findByCustomerId(UUID customerId) {
         List<OrderEntity> orderEntityList = orderRepository.findByCustomerId(customerId);
         return orderEntityList.stream()
                 .map(orderMapper::toModel)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public List<Order> findByStatus(OrderStatus orderStatus) {
         List<OrderEntity> orderEntityList = orderRepository.findByStatus(orderStatus);
         return orderEntityList.stream()
                 .map(orderMapper::toModel)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

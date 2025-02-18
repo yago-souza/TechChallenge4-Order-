@@ -112,7 +112,6 @@ public class OrderEntity {
         this.totalAmount = 0.0;
     }
 
-
     private void calculateTotalAmount() {
         this.totalAmount = items.stream()
                 .mapToDouble(OrderItemEntity::getTotalPrice)
