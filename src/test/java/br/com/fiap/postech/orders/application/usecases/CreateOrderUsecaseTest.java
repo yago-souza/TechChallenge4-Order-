@@ -11,6 +11,8 @@ import br.com.fiap.postech.orders.infrastructure.api.models.Customer;
 import br.com.fiap.postech.orders.infrastructure.api.models.Product;
 import br.com.fiap.postech.orders.infrastructure.exception.*;
 import br.com.fiap.postech.orders.infrastructure.gateway.impl.OrderRepositoryGatewayImpl;
+import br.com.fiap.postech.orders.infrastructure.mensageria.OrderCreatedEvent;
+import br.com.fiap.postech.orders.infrastructure.mensageria.OrderEventPublisher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -30,6 +32,9 @@ class CreateOrderUsecaseTest {
 
     @InjectMocks
     private CreateOrderUsecase createOrderUsecase;
+
+    @Mock
+    private OrderEventPublisher eventPublisher;
 
     @Mock
     private CustomerGateway customerGateway;
@@ -52,7 +57,7 @@ class CreateOrderUsecaseTest {
         UUID productId = UUID.randomUUID();
 
         // Criação de um item de pedido real
-        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0);
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0);
 
         // Criação do pedido real
         Order order = new Order(
@@ -73,7 +78,19 @@ class CreateOrderUsecaseTest {
         );
 
         // Simulação de um cliente válido retornado pelo ClientGateway
-        Customer customer = new Customer(customerId, "Test Client", "test@test.com", "teste, 123, teste");
+        Customer customer = new Customer(
+                customerId,
+                "Test Client",
+                "test@test.com",
+                new Address("Rua teste",
+                        "123",
+                        "Teste",
+                        "Bairro teste",
+                        "Cidade Teste",
+                        "Estado Teste",
+                        "Pais Teste",
+                        "12345-678")
+                );
         when(customerGateway.getCustomerById(customerId)).thenReturn(customer);
 
         // Simulação de um produto válido retornado pelo ProductGateway
@@ -103,7 +120,7 @@ class CreateOrderUsecaseTest {
         Order order = new Order(
                 OrderStatus.OPEN,
                 customerId,
-                List.of(new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0)),
+                List.of(new OrderItem(UUID.randomUUID(), productId, 2, 50.0)),
                 new Address("Rua teste",
                         "123",
                         "Teste",
@@ -135,7 +152,7 @@ class CreateOrderUsecaseTest {
         Order order = new Order(
                 OrderStatus.OPEN,
                 customerId,
-                List.of(new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0)),
+                List.of(new OrderItem(UUID.randomUUID(), productId, 2, 50.0)),
                 new Address("Rua teste",
                         "123",
                         "Teste",
@@ -150,7 +167,15 @@ class CreateOrderUsecaseTest {
         );
 
         // Simulação de um cliente válido retornado pelo ClientGateway
-        Customer customer = new Customer(customerId, "Test Client", "test@test.com", "teste, 123, teste");
+        Customer customer = new Customer(customerId, "Test Client", "test@test.com", new Address("Rua teste",
+                        "123",
+                        "Teste",
+                        "Bairro teste",
+                        "Cidade Teste",
+                        "Estado Teste",
+                        "Pais Teste",
+                        "12345-678")
+        );
         when(customerGateway.getCustomerById(customerId)).thenReturn(customer);
 
         // Simula a ausência do produto no sistema
@@ -172,7 +197,7 @@ class CreateOrderUsecaseTest {
         UUID productId = UUID.randomUUID();
 
         // Simulação de um item do pedido com quantidade maior do que o estoque disponível
-        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0);
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0);
         Order order = new Order(
                 OrderStatus.OPEN,
                 customerId,
@@ -191,7 +216,15 @@ class CreateOrderUsecaseTest {
         );
 
         // Simulação um cliente válido
-        Customer customer = new Customer(customerId, "Test Client", "test@test.com", "teste, 123, teste");
+        Customer customer = new Customer(customerId, "Test Client", "test@test.com", new Address("Rua teste",
+                        "123",
+                        "Teste",
+                        "Bairro teste",
+                        "Cidade Teste",
+                        "Estado Teste",
+                        "Pais Teste",
+                        "12345-678")
+        );
         when(customerGateway.getCustomerById(customerId)).thenReturn(customer);
 
         // Simulação de um produto válido retornado pelo ProductGateway
@@ -232,7 +265,15 @@ class CreateOrderUsecaseTest {
         );
 
         // Simulação um cliente válido
-        Customer customer = new Customer(customerId, "Test Client", "test@test.com", "teste, 123, teste");
+        Customer customer = new Customer(customerId, "Test Client", "test@test.com", new Address("Rua teste",
+                        "123",
+                        "Teste",
+                        "Bairro teste",
+                        "Cidade Teste",
+                        "Estado Teste",
+                        "Pais Teste",
+                        "12345-678")
+        );
         when(customerGateway.getCustomerById(customerId)).thenReturn(customer);
 
         assertThrows(NoItemException.class, () -> createOrderUsecase.execute(order));
@@ -244,7 +285,7 @@ class CreateOrderUsecaseTest {
     @Test
     void testCreateOrder_NoCustomer_ShouldThrowException() {
         UUID productId = UUID.randomUUID();
-        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0);
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0);
         Order order = new Order(
                 OrderStatus.OPEN,
                 null, // Sem cliente
@@ -271,7 +312,7 @@ class CreateOrderUsecaseTest {
         UUID customerId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
 
-        OrderItem item = new OrderItem(UUID.randomUUID(), productId, -2, 50.0, -100.0);
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, -2, 50.0);
         Order order = new Order(
                 OrderStatus.OPEN,
                 customerId,
@@ -290,7 +331,15 @@ class CreateOrderUsecaseTest {
         );
 
         // Simulação de um cliente válido retornado pelo ClientGateway
-        Customer customer = new Customer(customerId, "Test Client", "test@test.com", "teste, 123, teste");
+        Customer customer = new Customer(customerId, "Test Client", "test@test.com", new Address("Rua teste",
+                        "123",
+                        "Teste",
+                        "Bairro teste",
+                        "Cidade Teste",
+                        "Estado Teste",
+                        "Pais Teste",
+                        "12345-678")
+        );
         when(customerGateway.getCustomerById(customerId)).thenReturn(customer);
 
         // Simulação de um produto válido retornado pelo ProductGateway
@@ -308,7 +357,7 @@ class CreateOrderUsecaseTest {
         UUID customerId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
 
-        OrderItem item = new OrderItem(UUID.randomUUID(), productId, -2, 50.0, -100.0);
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0);
         Order order = new Order(
                 OrderStatus.OPEN,
                 customerId,
@@ -320,7 +369,15 @@ class CreateOrderUsecaseTest {
         );
 
         // Simulação de um cliente válido retornado pelo ClientGateway
-        Customer customer = new Customer(customerId, "Test Client", "test@test.com", "teste, 123, teste");
+        Customer customer = new Customer(customerId, "Test Client", "test@test.com", new Address("Rua teste",
+                        "123",
+                        "Teste",
+                        "Bairro teste",
+                        "Cidade Teste",
+                        "Estado Teste",
+                        "Pais Teste",
+                        "12345-678")
+        );
         when(customerGateway.getCustomerById(customerId)).thenReturn(customer);
 
         assertThrows(InvalidAddressException.class, () -> createOrderUsecase.execute(order));
@@ -331,21 +388,96 @@ class CreateOrderUsecaseTest {
         UUID customerId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
 
-        OrderItem item = new OrderItem(UUID.randomUUID(), productId, -2, 50.0, -100.0);
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0);
         Order order = new Order(
                 OrderStatus.OPEN,
                 customerId,
                 List.of(item),
-                null,
+                new Address("", "", "", "", "", "", "", ""),
                 PaymentMethod.CREDIT_CARD,
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
 
         // Simulação de um cliente válido retornado pelo ClientGateway
-        Customer customer = new Customer(customerId, "Test Client", "test@test.com", "teste, 123, teste");
+        Customer customer = new Customer(
+                customerId,
+                "Test Client",
+                "test@test.com",
+                new Address(
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""
+                )
+        );
         when(customerGateway.getCustomerById(customerId)).thenReturn(customer);
 
+        // Simulação de um produto válido retornado pelo ProductGateway
+        Product product = new Product(productId, "Produto Teste", "Descrição", 10.0, 100);
+        when(productGateway.getProductById(productId)).thenReturn(product);
+
+        // Simulação de estoque suficiente para o produto
+        when(productGateway.isInStock(productId, 2)).thenReturn(true);
+
+        // Simulação do salvamento do pedido no repositório
+        when(orderRepositoryGateway.save(order)).thenReturn(order);
+
         assertThrows(InvalidAddressException.class, () -> createOrderUsecase.execute(order));
+    }
+
+    @Test
+    void shouldPublishEventWhenOrderIsCreated() {
+        UUID customerId = UUID.randomUUID();
+        UUID productId = UUID.randomUUID();
+
+        // Criação de um item de pedido real
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0);
+
+        Order order = new Order(
+                OrderStatus.OPEN,
+                customerId,
+                List.of(item),
+                new Address("Rua teste",
+                        "123",
+                        "Teste",
+                        "Bairro teste",
+                        "Cidade Teste",
+                        "Estado Teste",
+                        "Pais Teste",
+                        "12345-678"),
+                PaymentMethod.CREDIT_CARD,
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
+
+        // Simulação de um cliente válido retornado pelo ClientGateway
+        Customer customer = new Customer(customerId, "Test Client", "test@test.com", new Address("Rua teste",
+                        "123",
+                        "Teste",
+                        "Bairro teste",
+                        "Cidade Teste",
+                        "Estado Teste",
+                        "Pais Teste",
+                        "12345-678")
+        );
+        when(customerGateway.getCustomerById(customerId)).thenReturn(customer);
+
+        // Simulação de um produto válido retornado pelo ProductGateway
+        Product product = new Product(productId, "Produto Teste", "Descrição", 10.0, 100);
+        when(productGateway.getProductById(productId)).thenReturn(product);
+
+        // Simulação de estoque suficiente para o produto
+        when(productGateway.isInStock(productId, 2)).thenReturn(true);
+
+        when(orderRepositoryGateway.save(any())).thenReturn(order);
+
+        createOrderUsecase.execute(order);
+
+        verify(eventPublisher).publishOrderCreatedEvent(any(OrderCreatedEvent.class));
     }
 }

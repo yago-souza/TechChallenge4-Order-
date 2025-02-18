@@ -1,17 +1,19 @@
 package br.com.fiap.postech.orders.infrastructure.api.models;
 
+import br.com.fiap.postech.orders.domain.entities.Address;
+
 import java.util.UUID;
 
 public class Customer {
     private UUID id;
     private String name;
     private String email;
-    private String address;
+    private Address address;
 
     public Customer() {
     }
 
-    public Customer(UUID id, String name, String email, String address) {
+    public Customer(UUID id, String name, String email, Address address) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -42,11 +44,11 @@ public class Customer {
         this.email = email;
     }
 
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 }

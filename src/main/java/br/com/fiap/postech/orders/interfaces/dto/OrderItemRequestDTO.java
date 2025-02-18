@@ -12,6 +12,6 @@ public record OrderItemRequestDTO(
         @Validated double unitPrice
 ) {
     public OrderItem toDomain() {
-        return new OrderItem(id, productId, quantity, unitPrice, 0.0);
+        return new OrderItem(id, productId, quantity, unitPrice);
     }
 }

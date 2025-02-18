@@ -1,27 +1,30 @@
 package br.com.fiap.postech.orders.application.usecases;
 
-import br.com.fiap.postech.orders.domain.enums.OrderStatus;
-import br.com.fiap.postech.orders.infrastructure.api.models.Customer;
-import br.com.fiap.postech.orders.infrastructure.api.models.Product;
 import br.com.fiap.postech.orders.domain.entities.Order;
+import br.com.fiap.postech.orders.domain.enums.OrderStatus;
 import br.com.fiap.postech.orders.infrastructure.api.CustomerGateway;
 import br.com.fiap.postech.orders.infrastructure.api.ProductGateway;
+import br.com.fiap.postech.orders.infrastructure.api.models.Customer;
+import br.com.fiap.postech.orders.infrastructure.api.models.Product;
 import br.com.fiap.postech.orders.infrastructure.exception.*;
 import br.com.fiap.postech.orders.infrastructure.gateway.impl.OrderRepositoryGatewayImpl;
+import br.com.fiap.postech.orders.infrastructure.mensageria.OrderCreatedEvent;
+import br.com.fiap.postech.orders.infrastructure.mensageria.OrderEventPublisher;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 
 @Service
 public class CreateOrderUsecase {
 
+    private final OrderEventPublisher eventPublisher;
     private final OrderRepositoryGatewayImpl orderRepositoryGateway;
     private final CustomerGateway customerGateway;
     private final ProductGateway productGateway;
 
-    public CreateOrderUsecase(OrderRepositoryGatewayImpl orderRepositoryGateway, CustomerGateway customerGateway, ProductGateway productGateway) {
+    public CreateOrderUsecase(OrderEventPublisher eventPublisher, OrderRepositoryGatewayImpl orderRepositoryGateway, CustomerGateway customerGateway, ProductGateway productGateway) {
+        this.eventPublisher = eventPublisher;
         this.orderRepositoryGateway = orderRepositoryGateway;
         this.customerGateway = customerGateway;
         this.productGateway = productGateway;
@@ -35,7 +38,18 @@ public class CreateOrderUsecase {
         order.setCreatedAt(LocalDateTime.now());
         order.setUpdatedAt(LocalDateTime.now());
 
-        return orderRepositoryGateway.save(order);
+        Order savedOrder = orderRepositoryGateway.save(order);
+
+        // Publica o evento
+        eventPublisher.publishOrderCreatedEvent(
+                new OrderCreatedEvent(
+                        savedOrder.getId(),
+                        savedOrder.getCustomerId(),
+                        savedOrder.getDeliveryAddress()
+                )
+        );
+
+        return savedOrder;
     }
 
     private void validateOrder(Order order) {
@@ -53,6 +67,16 @@ public class CreateOrderUsecase {
 
         if (order.getItems().isEmpty()) {
             throw new NoItemException("Pedido vazio.");
+        }
+
+        if (order.getDeliveryAddress().getStreet().isEmpty() ||
+                order.getDeliveryAddress().getNumber().isEmpty() ||
+                order.getDeliveryAddress().getDistrict().isEmpty() ||
+                order.getDeliveryAddress().getCity().isEmpty() ||
+                order.getDeliveryAddress().getCountry().isEmpty() ||
+                order.getDeliveryAddress().getPostalCode().isEmpty() ||
+                order.getDeliveryAddress().getComplement().isEmpty()) {
+            throw new InvalidAddressException("O endereço precisa estar completamente preenchido");
         }
         order.getItems().forEach(item -> {
             if (item.getQuantity() <= 0) {

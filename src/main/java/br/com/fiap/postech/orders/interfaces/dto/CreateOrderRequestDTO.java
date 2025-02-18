@@ -15,7 +15,7 @@ public record CreateOrderRequestDTO(
         @Validated UUID customerId,
         @NotEmpty(message = "A lista de itens não pode estar vazia")
         @Validated List<OrderItemRequestDTO> items,
-        @NotEmpty(message = "O endereço não pode estar vazio")
+        @NotNull(message = "O endereço não pode estar vazio")
         @Validated Address deliveryAddress,
         @NotNull(message = "O método de pagamento é obrigatório")
         @Validated PaymentMethod paymentMethod

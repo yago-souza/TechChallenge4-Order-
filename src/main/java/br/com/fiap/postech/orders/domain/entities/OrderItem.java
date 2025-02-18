@@ -12,12 +12,11 @@ public class OrderItem {
     public OrderItem() {
     }
 
-    public OrderItem(UUID id, UUID productId, int quantity, double unitPrice, double totalPrice) {
+    public OrderItem(UUID id, UUID productId, int quantity, double unitPrice) {
         this.id = id;
         this.productId = productId;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
-        this.totalPrice = totalPrice;
     }
 
     public UUID getId() {

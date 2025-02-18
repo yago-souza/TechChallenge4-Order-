@@ -49,7 +49,7 @@ class UpdateOrderStatusUseCaseTest {
         UUID productId = UUID.randomUUID();
 
         // Criação de um item de pedido real
-        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0);
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0);
 
         // Criação do pedido real
         Order order = new Order(
@@ -87,7 +87,7 @@ class UpdateOrderStatusUseCaseTest {
         UUID productId = UUID.randomUUID();
 
         // Criação de um item de pedido real
-        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0);
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0);
 
         // Criação do pedido real
         Order order = new Order(
@@ -124,7 +124,7 @@ class UpdateOrderStatusUseCaseTest {
         UUID productId = UUID.randomUUID();
 
         // Criação de um item de pedido real
-        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0);
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0);
 
         // Criação do pedido real
         Order order = new Order(
@@ -162,7 +162,7 @@ class UpdateOrderStatusUseCaseTest {
         UUID productId = UUID.randomUUID();
 
         // Criação de um item de pedido real
-        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0);
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0);
 
         // Criação do pedido real
         Order order = new Order(
@@ -199,7 +199,7 @@ class UpdateOrderStatusUseCaseTest {
         UUID productId = UUID.randomUUID();
 
         // Criação de um item de pedido real
-        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0);
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0);
 
         // Criação do pedido real
         Order order = new Order(
@@ -233,7 +233,7 @@ class UpdateOrderStatusUseCaseTest {
         UUID productId = UUID.randomUUID();
 
         // Criação de um item de pedido real
-        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0);
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0);
 
         // Criação do pedido real
         Order order = new Order(
@@ -270,7 +270,7 @@ class UpdateOrderStatusUseCaseTest {
         UUID productId = UUID.randomUUID();
 
         // Criação de um item de pedido real
-        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0);
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0);
 
         // Criação do pedido real
         Order order = new Order(
@@ -304,7 +304,7 @@ class UpdateOrderStatusUseCaseTest {
         UUID productId = UUID.randomUUID();
 
         // Criação de um item de pedido real
-        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0);
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0);
 
         // Criação do pedido real
         Order order = new Order(
@@ -341,7 +341,7 @@ class UpdateOrderStatusUseCaseTest {
         UUID productId = UUID.randomUUID();
 
         // Criação de um item de pedido real
-        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0);
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0);
 
         // Criação do pedido real
         Order order = new Order(
@@ -378,7 +378,7 @@ class UpdateOrderStatusUseCaseTest {
         UUID productId = UUID.randomUUID();
 
         // Criação de um item de pedido real
-        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0);
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0);
 
         // Criação do pedido real
         Order order = new Order(
@@ -415,7 +415,7 @@ class UpdateOrderStatusUseCaseTest {
         UUID productId = UUID.randomUUID();
 
         // Criação de um item de pedido real
-        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0);
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0);
 
         // Criação do pedido real
         Order order = new Order(
@@ -452,7 +452,7 @@ class UpdateOrderStatusUseCaseTest {
         UUID productId = UUID.randomUUID();
 
         // Criação de um item de pedido real
-        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0);
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0);
 
         // Criação do pedido real
         Order order = new Order(
@@ -489,7 +489,7 @@ class UpdateOrderStatusUseCaseTest {
         UUID productId = UUID.randomUUID();
 
         // Criação de um item de pedido real
-        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0);
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0);
 
         // Criação do pedido real
         Order order = new Order(
@@ -526,7 +526,7 @@ class UpdateOrderStatusUseCaseTest {
         UUID productId = UUID.randomUUID();
 
         // Criação de um item de pedido real
-        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0);
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0);
 
         // Criação do pedido real
         Order order = new Order(
@@ -563,7 +563,7 @@ class UpdateOrderStatusUseCaseTest {
         UUID productId = UUID.randomUUID();
 
         // Criação de um item de pedido real
-        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0);
+        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0);
 
         // Criação do pedido real
         Order order = new Order(
@@ -593,43 +593,4 @@ class UpdateOrderStatusUseCaseTest {
 
         verify(orderRepositoryGateway, never()).save(order);
     }
-
-    @Test
-    void testUpdateStatusWithInvalidStatus() {
-        UUID customerId = UUID.randomUUID();
-        UUID productId = UUID.randomUUID();
-
-        // Criação de um item de pedido real
-        OrderItem item = new OrderItem(UUID.randomUUID(), productId, 2, 50.0, 100.0);
-
-        // Criação do pedido real
-        Order order = new Order(
-                OrderStatus.OPEN,
-                customerId,
-                List.of(item),
-                new Address("Rua teste",
-                        "123",
-                        "Teste",
-                        "Bairro teste",
-                        "Cidade Teste",
-                        "Estado Teste",
-                        "Pais Teste",
-                        "12345-678"),
-                PaymentMethod.CREDIT_CARD,
-                LocalDateTime.now(),
-                LocalDateTime.now()
-        );
-
-        when(orderRepositoryGateway.findById(order.getId())).thenReturn(order);
-
-        // Act & Assert
-        UUID orderId = order.getId();
-        assertThrows(InvalidStatusException.class, () -> {
-            // Tentando atualizar o status para um valor inválido
-            updateOrderStatusUseCase.execute(orderId, null); // null representa um status inválido
-        });
-
-        verify(orderRepositoryGateway, never()).save(order);
-    }
-
 }

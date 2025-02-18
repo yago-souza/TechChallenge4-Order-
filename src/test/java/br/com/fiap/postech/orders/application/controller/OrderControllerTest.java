@@ -27,7 +27,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -83,7 +83,14 @@ class OrderControllerTest {
                                 29.0
                         )
                 ),
-                new Address("Rua teste", "123", "Teste", "Bairro teste", "Cidade Teste", "Estado Teste", "Pais Teste", "12345-678"),
+                new Address("Rua teste",
+                        "123",
+                        "Teste",
+                        "Bairro teste",
+                        "Cidade Teste",
+                        "Estado Teste",
+                        "Pais Teste",
+                        "12345-678"),
                 PaymentMethod.CREDIT_CARD
         );
 
@@ -95,11 +102,19 @@ class OrderControllerTest {
                                 itemId,
                                 productId,
                                 2,
-                                29.0,
-                                29.90
+                                29.0
                         )
                 ),
-                new Address("Rua teste", "123", "Teste", "Bairro teste", "Cidade Teste", "Estado Teste", "Pais Teste", "12345-678"),
+                new Address(
+                        "Rua teste",
+                        "123",
+                        "Teste",
+                        "Bairro teste",
+                        "Cidade Teste",
+                        "Estado Teste",
+                        "Pais Teste",
+                        "12345-678"
+                ),
                 PaymentMethod.CREDIT_CARD,
                 null,
                 null
@@ -140,7 +155,7 @@ class OrderControllerTest {
     void testAddItemToOrder_ShouldReturnOrderResponseDTO() {
         // Arrange
         UUID orderId = UUID.randomUUID();
-        OrderItem newItem = new OrderItem(UUID.randomUUID(), UUID.randomUUID(), 2, 100.0, 200.0);
+        OrderItem newItem = new OrderItem(UUID.randomUUID(), UUID.randomUUID(), 2, 100.0);
         Order order = new Order(
                 OrderStatus.OPEN,
                 orderId, List.of(newItem),
@@ -156,8 +171,6 @@ class OrderControllerTest {
                 null,
                 null);
 
-
-
         AddItemToOrderRequestDTO request = new AddItemToOrderRequestDTO(UUID.randomUUID(), 2, 100.0);
         when(addItemToOrderUseCase.execute(any(UUID.class), any(OrderItem.class))).thenReturn(order);
 
@@ -165,7 +178,7 @@ class OrderControllerTest {
         ResponseEntity<OrderResponseDTO> response = orderController.addItemToOrder(orderId, request);
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertNotNull(response.getBody());
     }
 
@@ -180,7 +193,6 @@ class OrderControllerTest {
                 List.of(new OrderItem(UUID.randomUUID(),
                         productId,
                         1,
-                        50.0,
                         50.0)),
                 new Address("Rua teste",
                         "123",
@@ -199,7 +211,7 @@ class OrderControllerTest {
         ResponseEntity<OrderResponseDTO> response = orderController.removeItemFromOrder(orderId, productId);
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertNotNull(response.getBody());
         verify(removeItemFromOrderUseCase, times(1)).execute(orderId, productId);
     }
@@ -230,7 +242,7 @@ class OrderControllerTest {
         ResponseEntity<OrderResponseDTO> response = orderController.updateOrderStatus(orderId, request);
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertNotNull(response.getBody());
         verify(updateOrderStatusUseCase, times(1)).execute(orderId, OrderStatus.SHIPPED);
     }
@@ -260,9 +272,42 @@ class OrderControllerTest {
         ResponseEntity<List<OrderResponseDTO>> response = orderController.listOrders(customerId, OrderStatus.OPEN);
 
         // Assert
-        assertEquals(200, response.getStatusCodeValue());
+        assertEquals(200, response.getStatusCode().value());
         assertNotNull(response.getBody());
         assertFalse(response.getBody().isEmpty());
         verify(listOrdersUseCase, times(1)).execute(customerId, OrderStatus.OPEN);
     }
+
+    @Test
+    void testGetById_ShouldReturnOrderResponseDTO() throws Exception {
+        // Arrange
+        UUID orderId = UUID.fromString("71a374d1-3607-4c26-a4f8-158311d76c44");
+        Order mockOrder = new Order(
+                OrderStatus.OPEN,
+                orderId,
+                List.of(),
+                new Address("Rua teste",
+                        "123",
+                        "Teste",
+                        "Bairro teste",
+                        "Cidade Teste",
+                        "Estado Teste",
+                        "Pais Teste",
+                        "12345-678"),
+                null,
+                null,
+                null);
+
+        mockOrder.setId(orderId);
+
+        when(getOrderUseCase.execute(orderId)).thenReturn(mockOrder);
+
+        // Act & Assert
+        mockMvc.perform(get("/orders/{id}", orderId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(orderId.toString()))
+                .andExpect(jsonPath("$.status").value("OPEN"));
+    }
+
 }
