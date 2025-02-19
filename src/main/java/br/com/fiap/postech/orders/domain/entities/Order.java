@@ -3,11 +3,9 @@ package br.com.fiap.postech.orders.domain.entities;
 import br.com.fiap.postech.orders.domain.enums.OrderStatus;
 import br.com.fiap.postech.orders.domain.enums.PaymentMethod;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Order {
 
@@ -155,22 +153,12 @@ public class Order {
         this.totalAmount = 0.0;
     }
 
-
     private void calculateTotalAmount() {
         this.totalAmount = items.stream()
-                .mapToDouble(OrderItem::getTotalPrice)
+                .map(OrderItem::getTotalPrice) // Obtém o BigDecimal
+                .filter(Objects::nonNull) // Evita NullPointerException
+                .mapToDouble(BigDecimal::doubleValue) // Converte para double
                 .sum();
     }
 
-    public void updateStatus(OrderStatus newStatus) {
-        // Valide a transição de status aqui
-        if (this.status == OrderStatus.DELIVERED && newStatus == OrderStatus.OPEN) {
-            throw new IllegalStateException("Pedidos entregues não podem voltar para 'Em Aberto'.");
-        }
-        if (this.status != OrderStatus.DELIVERED && newStatus == OrderStatus.RETURNED) {
-            throw new IllegalStateException("Apenas pedidos entregues podem ir para 'Devolução'.");
-        }
-        this.status = newStatus;
-        this.updatedAt = LocalDateTime.now();
-    }
 }

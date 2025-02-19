@@ -41,7 +41,6 @@ class RemoveItemFromOrderUseCaseTest {
         orderItem = new OrderItem();
         order.setStatus(OrderStatus.OPEN);
         orderItem.setProductId(productId);
-        orderItem.setQuantity(1);
         order.addItem(orderItem);
     }
 

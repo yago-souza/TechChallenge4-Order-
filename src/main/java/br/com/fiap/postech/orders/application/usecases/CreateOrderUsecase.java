@@ -8,11 +8,12 @@ import br.com.fiap.postech.orders.infrastructure.api.models.Customer;
 import br.com.fiap.postech.orders.infrastructure.api.models.Product;
 import br.com.fiap.postech.orders.infrastructure.exception.*;
 import br.com.fiap.postech.orders.infrastructure.gateway.impl.OrderRepositoryGatewayImpl;
-import br.com.fiap.postech.orders.infrastructure.mensageria.OrderCreatedEvent;
-import br.com.fiap.postech.orders.infrastructure.mensageria.OrderEventPublisher;
+import br.com.fiap.postech.orders.infrastructure.messaging.OrderCreatedEvent;
+import br.com.fiap.postech.orders.infrastructure.messaging.OrderEventPublisher;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Service
@@ -82,7 +83,7 @@ public class CreateOrderUsecase {
             if (item.getQuantity() <= 0) {
                 throw new InvalidQuantityException("A quantidade deve ser maior que zero para o produto: " + item.getProductId());
             }
-            if (item.getTotalPrice() < 0) {
+            if (item.getTotalPrice().compareTo(BigDecimal.ZERO) < 0) {
                 throw new InvalidPriceException("O valor total do item não pode ser negativo para o produto: " + item.getProductId());
             }
 

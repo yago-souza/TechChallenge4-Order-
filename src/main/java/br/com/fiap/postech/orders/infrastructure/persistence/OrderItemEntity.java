@@ -1,24 +1,43 @@
 package br.com.fiap.postech.orders.infrastructure.persistence;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.UUID;
 
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "TB_ORDER_ITEMS")
 public class OrderItemEntity {
+    @Id
     private UUID id;
+    @Column(nullable = false)
     private UUID productId;
+    @Column(nullable = false)
     private int quantity;
-    private double unitPrice;
-    private double totalPrice;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal totalPrice;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal unitPrice;
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    @JsonBackReference
+    private OrderEntity order;
+
+    public OrderItemEntity(UUID id, UUID productId, int quantity, BigDecimal unitPrice, OrderEntity order) {
+        this.id = id;
+        this.productId = productId;
+        this.quantity = quantity;
+        this.unitPrice = unitPrice;
+        this.order = order;
+        calculateTotalPrice(); // Calcula o preço total ao criar o item
+    }
+
 
     public UUID getId() {
         return id;
@@ -41,28 +60,35 @@ public class OrderItemEntity {
     }
 
     public void setQuantity(int quantity) {
+        if (quantity < 0) {
+            throw new IllegalArgumentException("Quantidade não pode ser negativa.");
+        }
         this.quantity = quantity;
-        calculateTotalPrice(); // Recalcula o totalPrice quando o preço unitário é alterado
+        calculateTotalPrice();
     }
 
-    public double getUnitPrice() {
+    public BigDecimal getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(double unitPrice) {
-        this.unitPrice = unitPrice;
-        calculateTotalPrice(); // Recalcula o totalPrice quando o preço unitário é alterado
+    public void setUnitPrice(BigDecimal unitPrice) {
+        if (unitPrice == null || unitPrice.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("O preço unitário não pode ser nulo ou negativo.");
+        }
+        this.unitPrice = unitPrice.setScale(2, RoundingMode.HALF_UP);
+        calculateTotalPrice();
     }
 
-    public double getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(double totalPrice) {
-        this.totalPrice = totalPrice;
-    }
-
     private void calculateTotalPrice() {
-        this.totalPrice = this.quantity * this.unitPrice;
+        if (this.unitPrice != null && this.quantity >= 0) {
+            this.totalPrice = this.unitPrice.multiply(BigDecimal.valueOf(this.quantity))
+                    .setScale(2, RoundingMode.HALF_UP);
+        } else {
+            this.totalPrice = BigDecimal.ZERO;
+        }
     }
 }

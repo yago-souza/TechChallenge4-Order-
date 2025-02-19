@@ -3,6 +3,7 @@ package br.com.fiap.postech.orders.application.usecases;
 import br.com.fiap.postech.orders.domain.entities.Order;
 import br.com.fiap.postech.orders.domain.enums.OrderStatus;
 import br.com.fiap.postech.orders.infrastructure.gateway.impl.OrderRepositoryGatewayImpl;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class ListOrdersUseCase {
             this.orderRepositoryGateway = orderRepositoryGateway;
         }
 
+        @Transactional
         public List<Order> execute(UUID customerId, OrderStatus status) {
             if (customerId != null && status != null) {
                 return orderRepositoryGateway.findByCustomerIdAndStatus(customerId, status);

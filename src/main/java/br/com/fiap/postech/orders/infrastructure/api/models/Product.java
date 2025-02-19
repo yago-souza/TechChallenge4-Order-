@@ -1,18 +1,19 @@
 package br.com.fiap.postech.orders.infrastructure.api.models;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class Product {
     private UUID id;
     private String name;
     private String description;
-    private double price;
+    private BigDecimal price;
     private int stockQuantity;
 
     public Product() {
     }
 
-    public Product(UUID id, String name, String description, double price, int stockQuantity) {
+    public Product(UUID id, String name, String description, BigDecimal price, int stockQuantity) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -44,11 +45,11 @@ public class Product {
         this.description = description;
     }
 
-    public double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

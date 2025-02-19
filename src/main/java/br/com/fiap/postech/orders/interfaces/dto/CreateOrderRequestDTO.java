@@ -2,6 +2,8 @@ package br.com.fiap.postech.orders.interfaces.dto;
 
 import br.com.fiap.postech.orders.domain.entities.Address;
 import br.com.fiap.postech.orders.domain.entities.Order;
+import br.com.fiap.postech.orders.domain.entities.OrderItem;
+import br.com.fiap.postech.orders.domain.enums.OrderStatus;
 import br.com.fiap.postech.orders.domain.enums.PaymentMethod;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -22,14 +24,22 @@ public record CreateOrderRequestDTO(
 ) {
     // Método para converter DTO -> Domínio
     public Order toDomain() {
-        return new Order(
-                null, // Status inicial (ex: "OPEN")
+        Order order = new Order(
+                OrderStatus.OPEN,
                 customerId,
-                items.stream().map(OrderItemRequestDTO::toDomain).toList(),
+                null, // Lista de itens será preenchida depois
                 deliveryAddress,
                 paymentMethod,
                 null, // estimatedDeliveryDate
-                null // createdAt
+                null  // createdAt
         );
+
+        // Associa os itens ao pedido
+        List<OrderItem> domainItems = items.stream()
+                .map(item -> item.toDomain(order))
+                .toList();
+
+        order.setItems(domainItems);
+        return order;
     }
 }

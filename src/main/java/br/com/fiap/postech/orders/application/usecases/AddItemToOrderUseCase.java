@@ -10,6 +10,7 @@ import br.com.fiap.postech.orders.infrastructure.gateway.impl.OrderRepositoryGat
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Service
@@ -47,6 +48,9 @@ public class AddItemToOrderUseCase {
             throw new InsufficientStockException("Estoque insuficiente para o produto: " + newItem.getProductId());
         }
 
+        if (newItem.getUnitPrice().compareTo(BigDecimal.ZERO) < 0) {
+            throw new RuntimeException("Valor unitário invlaido para o produto: " + newItem.getProductId());
+        }
         // Adiciona o item ao pedido
         order.addItem(newItem);
 

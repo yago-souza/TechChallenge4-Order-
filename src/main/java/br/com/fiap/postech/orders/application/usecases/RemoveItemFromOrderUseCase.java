@@ -5,10 +5,12 @@ import br.com.fiap.postech.orders.domain.entities.OrderItem;
 import br.com.fiap.postech.orders.infrastructure.exception.OrderNotFoundException;
 import br.com.fiap.postech.orders.infrastructure.exception.ProductNotFoundException;
 import br.com.fiap.postech.orders.infrastructure.gateway.impl.OrderRepositoryGatewayImpl;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+@Service
 public class RemoveItemFromOrderUseCase {
     //    Responsabilidade: Remover um item de um pedido existente.
     //

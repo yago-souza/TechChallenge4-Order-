@@ -1,4 +1,4 @@
-package br.com.fiap.postech.orders.infrastructure.mensageria;
+package br.com.fiap.postech.orders.infrastructure.messaging;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

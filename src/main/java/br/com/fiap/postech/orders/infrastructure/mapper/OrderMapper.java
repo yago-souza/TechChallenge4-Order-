@@ -25,15 +25,14 @@ public class OrderMapper {
 
         return new OrderEntity(
                 order.getId(),
-                order.getStatus(),
-                order.getCustomerId(),
-                orderItems,
-                order.getDeliveryAddress(),
-                order.getTotalAmount(),
-                order.getPaymentMethod(),
-                order.getEstimatedDeliveryDate(),
+                order.getUpdatedAt(),
                 order.getCreatedAt(),
-                order.getUpdatedAt()
+                order.getEstimatedDeliveryDate(),
+                order.getPaymentMethod(),
+                order.getDeliveryAddress(),
+                orderItems,
+                order.getCustomerId(),
+                order.getStatus()
         );
     }
 

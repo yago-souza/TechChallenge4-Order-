@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -72,17 +73,16 @@ class OrderControllerTest {
         UUID itemId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
 
+        OrderItemRequestDTO orderItemRequestDTO = new OrderItemRequestDTO(
+                itemId,
+                productId,
+                2,
+                BigDecimal.valueOf(29.10)
+        );
+
         CreateOrderRequestDTO requestDTO = new CreateOrderRequestDTO(
                 customerId,
-                Collections.singletonList(
-
-                        new OrderItemRequestDTO(
-                                itemId,
-                                productId,
-                                2,
-                                29.0
-                        )
-                ),
+                List.of(orderItemRequestDTO),
                 new Address("Rua teste",
                         "123",
                         "Teste",
@@ -94,33 +94,9 @@ class OrderControllerTest {
                 PaymentMethod.CREDIT_CARD
         );
 
-        Order mockOrder = new Order(
-                OrderStatus.OPEN,
-                customerId,
-                Collections.singletonList(
-                        new OrderItem(
-                                itemId,
-                                productId,
-                                2,
-                                29.0
-                        )
-                ),
-                new Address(
-                        "Rua teste",
-                        "123",
-                        "Teste",
-                        "Bairro teste",
-                        "Cidade Teste",
-                        "Estado Teste",
-                        "Pais Teste",
-                        "12345-678"
-                ),
-                PaymentMethod.CREDIT_CARD,
-                null,
-                null
-        );
+        Order mockOrder = requestDTO.toDomain(); // Usa o método para criar a entidade
+        mockOrder.setId(orderId); // Define o ID da ordem manualmente para o teste
 
-        mockOrder.setId(orderId);
         when(createOrderUseCase.execute(Mockito.any())).thenReturn(mockOrder);
 
         // Act & Assert
@@ -133,6 +109,7 @@ class OrderControllerTest {
                 .andExpect(jsonPath("$.customerId").value(customerId.toString()))
                 .andExpect(jsonPath("$.items[0].productId").value(productId.toString()));
     }
+
 
     @Test
     void shouldReturnBadRequestWhenInvalidInput() throws Exception {
@@ -155,10 +132,11 @@ class OrderControllerTest {
     void testAddItemToOrder_ShouldReturnOrderResponseDTO() {
         // Arrange
         UUID orderId = UUID.randomUUID();
-        OrderItem newItem = new OrderItem(UUID.randomUUID(), UUID.randomUUID(), 2, 100.0);
-        Order order = new Order(
-                OrderStatus.OPEN,
-                orderId, List.of(newItem),
+        Order order = new Order();
+        OrderItem newItem = new OrderItem(UUID.randomUUID(), UUID.randomUUID(), 2, BigDecimal.valueOf(100.0), order);
+        order.setStatus(OrderStatus.OPEN);
+        order.addItem(newItem);
+        order.setDeliveryAddress(
                 new Address("Rua teste",
                         "123",
                         "Teste",
@@ -166,12 +144,10 @@ class OrderControllerTest {
                         "Cidade Teste",
                         "Estado Teste",
                         "Pais Teste",
-                        "12345-678"),
-                null,
-                null,
-                null);
+                        "12345-678")
+        );
 
-        AddItemToOrderRequestDTO request = new AddItemToOrderRequestDTO(UUID.randomUUID(), 2, 100.0);
+        AddItemToOrderRequestDTO request = new AddItemToOrderRequestDTO(UUID.randomUUID(), 2, BigDecimal.valueOf(100.0));
         when(addItemToOrderUseCase.execute(any(UUID.class), any(OrderItem.class))).thenReturn(order);
 
         // Act
@@ -187,13 +163,11 @@ class OrderControllerTest {
         // Arrange
         UUID orderId = UUID.randomUUID();
         UUID productId = UUID.randomUUID();
-        Order order = new Order(
-                OrderStatus.OPEN,
-                orderId,
-                List.of(new OrderItem(UUID.randomUUID(),
-                        productId,
-                        1,
-                        50.0)),
+        Order order = new Order();
+        OrderItem newItem = new OrderItem(UUID.randomUUID(), UUID.randomUUID(), 2, BigDecimal.valueOf(100.0), order);
+        order.setStatus(OrderStatus.OPEN);
+        order.addItem(newItem);
+        order.setDeliveryAddress(
                 new Address("Rua teste",
                         "123",
                         "Teste",
@@ -201,10 +175,8 @@ class OrderControllerTest {
                         "Cidade Teste",
                         "Estado Teste",
                         "Pais Teste",
-                        "12345-678"),
-                null,
-                null,
-                null);
+                        "12345-678")
+        );
         when(removeItemFromOrderUseCase.execute(orderId, productId)).thenReturn(order);
 
         // Act

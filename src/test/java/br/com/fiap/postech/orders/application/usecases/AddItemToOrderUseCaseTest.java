@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,12 +46,12 @@ class AddItemToOrderUseCaseTest {
         order.setId(orderId);
         orderItem = new OrderItem();
         orderItem.setProductId(productId);
-        orderItem.setQuantity(1);
+        orderItem.setUnitPrice(BigDecimal.valueOf(10.01));
     }
 
     @Test
     void shouldAddItemToOrderSuccessfully() {
-        Product product = new Product(productId, "Produto Teste", "Descrição", 10.0, 100);
+        Product product = new Product(productId, "Produto Teste", "Descrição", BigDecimal.valueOf(10.0), 100);
 
         when(orderRepositoryGateway.findById(orderId)).thenReturn(order);
         when(productGateway.getProductById(productId)).thenReturn(product); // Simula produto existente
@@ -81,7 +82,7 @@ class AddItemToOrderUseCaseTest {
 
     @Test
     void shouldThrowExceptionWhenInsufficientStock() {
-        Product product = new Product(productId, "Produto Teste", "Descrição", 10.0, 100);
+        Product product = new Product(productId, "Produto Teste", "Descrição", BigDecimal.valueOf(10.0), 100);
 
         when(orderRepositoryGateway.findById(orderId)).thenReturn(order);
         when(productGateway.getProductById(productId)).thenReturn(product);

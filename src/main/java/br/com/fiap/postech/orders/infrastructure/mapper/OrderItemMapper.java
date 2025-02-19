@@ -7,13 +7,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class OrderItemMapper {
 
+    private OrderMapper orderMapper;
+
     public OrderItemEntity toEntity (OrderItem orderItem) {
+
         return new OrderItemEntity(
                 orderItem.getId(),
                 orderItem.getProductId(),
                 orderItem.getQuantity(),
                 orderItem.getUnitPrice(),
-                orderItem.getTotalPrice()
+                orderMapper.toEntity(orderItem.getOrder())
         );
     }
 
@@ -22,7 +25,8 @@ public class OrderItemMapper {
                 entity.getId(),
                 entity.getProductId(),
                 entity.getQuantity(),
-                entity.getUnitPrice()
+                entity.getUnitPrice(),
+                orderMapper.toModel(entity.getOrder())
         );
     }
 }

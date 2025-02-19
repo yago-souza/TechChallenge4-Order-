@@ -1,22 +1,27 @@
 package br.com.fiap.postech.orders.domain.entities;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class OrderItem {
     private UUID id;
     private UUID productId;
     private int quantity;
-    private double unitPrice;
-    private double totalPrice;
+    private BigDecimal unitPrice;
+    private BigDecimal totalPrice;
+    private Order order;
 
     public OrderItem() {
     }
 
-    public OrderItem(UUID id, UUID productId, int quantity, double unitPrice) {
+    public OrderItem(UUID id, UUID productId, int quantity, BigDecimal unitPrice, Order order) {
         this.id = id;
         this.productId = productId;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
+        this.order = order;
+
+        calculateTotalPrice();
     }
 
     public UUID getId() {
@@ -44,20 +49,27 @@ public class OrderItem {
         calculateTotalPrice(); // Recalcula o totalPrice quando o preço unitário é alterado
     }
 
-    public double getUnitPrice() {
+    public BigDecimal getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(double unitPrice) {
+    public void setUnitPrice(BigDecimal unitPrice) {
         this.unitPrice = unitPrice;
         calculateTotalPrice(); // Recalcula o totalPrice quando o preço unitário é alterado
     }
 
-    public double getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
     private void calculateTotalPrice() {
-        this.totalPrice = this.quantity * this.unitPrice;
+        if (this.unitPrice == null) {
+            throw new IllegalStateException("unitPrice não pode ser nulo ao calcular totalPrice");
+        }
+        this.totalPrice = BigDecimal.valueOf(this.quantity).multiply(this.unitPrice);
+    }
+
+    public Order getOrder() {
+        return order;
     }
 }

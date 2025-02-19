@@ -1,4 +1,4 @@
-package br.com.fiap.postech.orders.infrastructure.mensageria;
+package br.com.fiap.postech.orders.infrastructure.messaging;
 
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;

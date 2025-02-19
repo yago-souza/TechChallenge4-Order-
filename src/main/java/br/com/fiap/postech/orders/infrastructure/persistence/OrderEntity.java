@@ -3,11 +3,13 @@ package br.com.fiap.postech.orders.infrastructure.persistence;
 import br.com.fiap.postech.orders.domain.entities.Address;
 import br.com.fiap.postech.orders.domain.enums.OrderStatus;
 import br.com.fiap.postech.orders.domain.enums.PaymentMethod;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,14 +32,15 @@ public class OrderEntity {
     @Column(nullable = false)
     private UUID customerId;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JsonManagedReference
     private List<OrderItemEntity> items = new ArrayList<>();
 
-    @Column(nullable = false)
+    @Embedded
     private Address deliveryAddress;
 
-    @Column(nullable = false)
-    private double totalAmount;
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal totalAmount = BigDecimal.ZERO;
 
     @Column(nullable = false)
     private PaymentMethod paymentMethod;
@@ -57,7 +60,31 @@ public class OrderEntity {
         updatedAt = LocalDateTime.now();
     }
 
-   public void setId(UUID id) {
+    public OrderEntity(
+            UUID id,
+            LocalDateTime updatedAt,
+            LocalDateTime createdAt,
+            LocalDateTime estimatedDeliveryDate,
+            PaymentMethod paymentMethod,
+            Address deliveryAddress,
+            List<OrderItemEntity> items,
+            UUID customerId,
+            OrderStatus status
+    ) {
+        this.id = id;
+        this.updatedAt = updatedAt;
+        this.createdAt = createdAt;
+        this.estimatedDeliveryDate = estimatedDeliveryDate;
+        this.paymentMethod = paymentMethod;
+        this.deliveryAddress = deliveryAddress;
+        this.items = items;
+        this.customerId = customerId;
+        this.status = status;
+
+        calculateTotalAmount();
+    }
+
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -110,14 +137,15 @@ public class OrderEntity {
             throw new IllegalStateException("Não é possível remover itens de um pedido processado.");
         }
         this.items.clear();
-        this.totalAmount = 0.0;
+        this.totalAmount = BigDecimal.ZERO;
     }
 
     private void calculateTotalAmount() {
         this.totalAmount = items.stream()
-                .mapToDouble(OrderItemEntity::getTotalPrice)
-                .sum();
+                .map(item -> item.getTotalPrice())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
+
 
     public void updateStatus(OrderStatus newStatus) {
         // Valide a transição de status aqui
