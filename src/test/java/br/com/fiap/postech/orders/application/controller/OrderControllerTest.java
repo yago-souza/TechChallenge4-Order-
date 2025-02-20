@@ -6,6 +6,7 @@ import br.com.fiap.postech.orders.domain.entities.Order;
 import br.com.fiap.postech.orders.domain.entities.OrderItem;
 import br.com.fiap.postech.orders.domain.enums.OrderStatus;
 import br.com.fiap.postech.orders.domain.enums.PaymentMethod;
+import br.com.fiap.postech.orders.infrastructure.messaging.KafkaProducerService;
 import br.com.fiap.postech.orders.interfaces.dto.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,6 +59,9 @@ class OrderControllerTest {
 
     @Mock
     private ListOrdersUseCase listOrdersUseCase;
+
+    @Mock
+    private KafkaProducerService kafkaProducerService;
 
 
     @BeforeEach
@@ -192,7 +196,6 @@ class OrderControllerTest {
     void testUpdateOrderStatus_ShouldReturnOrderResponseDTO() {
         // Arrange
         UUID orderId = UUID.randomUUID();
-        UpdateOrderStatusRequestDTO request = new UpdateOrderStatusRequestDTO(OrderStatus.SHIPPED);
         Order order = new Order(
                 OrderStatus.SHIPPED,
                 orderId,
@@ -211,7 +214,7 @@ class OrderControllerTest {
         when(updateOrderStatusUseCase.execute(orderId, OrderStatus.SHIPPED)).thenReturn(order);
 
         // Act
-        ResponseEntity<OrderResponseDTO> response = orderController.updateOrderStatus(orderId, request);
+        ResponseEntity<OrderResponseDTO> response = orderController.updateOrderStatus(orderId, order.getStatus());
 
         // Assert
         assertEquals(200, response.getStatusCode().value());
