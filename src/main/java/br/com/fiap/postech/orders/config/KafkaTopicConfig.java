@@ -15,6 +15,6 @@ public class KafkaTopicConfig {
 
     @Bean
     public NewTopic ordersCompletedTopic() {
-        return TopicBuilder.name("orders.completed").build();
+        return TopicBuilder.name("orders.delivered").build();
     }
 }

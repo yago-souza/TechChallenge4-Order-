@@ -11,6 +11,8 @@ import br.com.fiap.postech.orders.infrastructure.api.models.Customer;
 import br.com.fiap.postech.orders.infrastructure.api.models.Product;
 import br.com.fiap.postech.orders.infrastructure.exception.*;
 import br.com.fiap.postech.orders.infrastructure.gateway.impl.OrderRepositoryGatewayImpl;
+import br.com.fiap.postech.orders.infrastructure.mapper.OrderMapper;
+import br.com.fiap.postech.orders.infrastructure.messaging.KafkaProducerService;
 import br.com.fiap.postech.orders.infrastructure.messaging.OrderCreatedEvent;
 import br.com.fiap.postech.orders.infrastructure.messaging.OrderEventPublisher;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +38,18 @@ class CreateOrderUsecaseTest {
 
     @Mock
     private OrderEventPublisher eventPublisher;
+
+    @Mock
+    private OrderCreatedEvent orderCreatedEvent;
+
+    @Mock
+    private OrderEventPublisher orderEventPublisher;
+
+    @Mock
+    private OrderMapper orderMapper;
+
+    @Mock
+    private KafkaProducerService kafkaProducerService;
 
     @Mock
     private CustomerGateway customerGateway;
@@ -499,6 +513,6 @@ class CreateOrderUsecaseTest {
 
         createOrderUsecase.execute(order);
 
-        verify(eventPublisher).publishOrderCreatedEvent(any(OrderCreatedEvent.class));
+        verify(kafkaProducerService).sendOrderCreatedEvent(any(OrderCreatedEvent.class));
     }
 }

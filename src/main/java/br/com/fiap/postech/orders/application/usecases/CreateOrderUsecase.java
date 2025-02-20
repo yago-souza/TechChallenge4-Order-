@@ -8,8 +8,9 @@ import br.com.fiap.postech.orders.infrastructure.api.models.Customer;
 import br.com.fiap.postech.orders.infrastructure.api.models.Product;
 import br.com.fiap.postech.orders.infrastructure.exception.*;
 import br.com.fiap.postech.orders.infrastructure.gateway.impl.OrderRepositoryGatewayImpl;
+import br.com.fiap.postech.orders.infrastructure.mapper.OrderMapper;
+import br.com.fiap.postech.orders.infrastructure.messaging.KafkaProducerService;
 import br.com.fiap.postech.orders.infrastructure.messaging.OrderCreatedEvent;
-import br.com.fiap.postech.orders.infrastructure.messaging.OrderEventPublisher;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -19,16 +20,18 @@ import java.time.LocalDateTime;
 @Service
 public class CreateOrderUsecase {
 
-    private final OrderEventPublisher eventPublisher;
     private final OrderRepositoryGatewayImpl orderRepositoryGateway;
     private final CustomerGateway customerGateway;
     private final ProductGateway productGateway;
+    private final KafkaProducerService kafkaProducerService;
+    private final OrderMapper orderMapper;
 
-    public CreateOrderUsecase(OrderEventPublisher eventPublisher, OrderRepositoryGatewayImpl orderRepositoryGateway, CustomerGateway customerGateway, ProductGateway productGateway) {
-        this.eventPublisher = eventPublisher;
+    public CreateOrderUsecase(OrderRepositoryGatewayImpl orderRepositoryGateway, CustomerGateway customerGateway, ProductGateway productGateway, KafkaProducerService kafkaProducerService, OrderMapper orderMapper) {
         this.orderRepositoryGateway = orderRepositoryGateway;
         this.customerGateway = customerGateway;
         this.productGateway = productGateway;
+        this.kafkaProducerService = kafkaProducerService;
+        this.orderMapper = orderMapper;
     }
 
     @Transactional
@@ -41,14 +44,13 @@ public class CreateOrderUsecase {
 
         Order savedOrder = orderRepositoryGateway.save(order);
 
-        // Publica o evento
-        eventPublisher.publishOrderCreatedEvent(
-                new OrderCreatedEvent(
-                        savedOrder.getId(),
-                        savedOrder.getCustomerId(),
-                        savedOrder.getDeliveryAddress()
-                )
+        OrderCreatedEvent orderCreatedEvent = new OrderCreatedEvent(
+                savedOrder.getId(),
+                savedOrder.getCustomerId(),
+                savedOrder.getDeliveryAddress()
         );
+        // Publica o evento
+        kafkaProducerService.sendOrderCreatedEvent(orderCreatedEvent);
 
         return savedOrder;
     }

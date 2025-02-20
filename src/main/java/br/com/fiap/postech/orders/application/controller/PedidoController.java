@@ -23,17 +23,13 @@ public class PedidoController {
 
     @PostMapping
     public ResponseEntity<String> createOrder(@RequestBody OrderCreatedEvent order) {
-
         kafkaProducerService.sendOrderCreatedEvent(order);
-
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/delivered")
     public ResponseEntity<String> deliveredOrder(@RequestBody OrderDeliveredEvent order) {
-
         kafkaProducerService.sendOrderDeliveredEvent(order);
-
         return ResponseEntity.ok().build();
     }
 }
