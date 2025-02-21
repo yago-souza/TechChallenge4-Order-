@@ -21,3 +21,5 @@ EXPOSE "8080:8080"
 
 # Comando para rodar a aplicação
 ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app/customermanagement-1.0.0.jar"]
+
+ENV
